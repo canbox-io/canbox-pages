@@ -68,11 +68,25 @@
                         <h2 data-zh="项目结构" data-en="Project Structure">项目结构</h2>
                         <pre><code>canbox/
 ├── dist/                  # 构建输出目录
+├── locales/               # 国际化语言文件
 ├── modules/               # 核心模块
+│   ├── auto-update/       # 自动更新
+│   ├── childprocess/      # 子进程管理
+│   ├── core/              # 核心工具（db、dialog、sudo、win等）
+│   ├── execution/         # 执行分发
+│   ├── file-task/         # 文件任务管理
+│   ├── integrated/        # 集成窗口
+│   ├── ipc/               # IPC 处理器
+│   ├── main/              # 主进程核心（appManager、storageManager、pathManager等）
+│   ├── services/          # 服务模块
+│   └── web-app/           # 网页应用创建
 ├── public/                # 静态资源
-├── src/                   # 前端源码
+├── src/                   # 前端 Vue 源码
+├── types/                 # TypeScript 类型定义
 ├── main.js                # 主进程入口
+├── preload.js             # 预加载脚本
 ├── ipcHandlers.js         # IPC 通信处理
+├── tray.js                # 托盘管理
 └── package.json           # 项目配置</code></pre>
                     </section>
 
@@ -93,7 +107,7 @@
                     <section id="build" class="doc-section">
                         <h2 data-zh="编译打包" data-en="Build and Package">编译打包</h2>
                         <pre><code># 1 克隆项目
-git clone https://github.com/lizl6/canbox.git
+git clone https://github.com/rexlevin/canbox.git
 
 # 2 安装依赖：
 npm install
@@ -102,8 +116,9 @@ npm install
 npm run build
 
 # 4 打包
-npm run build-dist:linux  # Linux包需要在linux环境下
-npm run build-dist:win    # Windows包需要在windows下</code></pre>
+npm run build-dist        # 构建 Electron 目录（Vite 编译 + asar 打包）
+npm run build-exe         # 构建 Windows exe（需在 Windows 下）
+npm run build-appimage    # 构建 Linux AppImage（需在 Linux 下）</code></pre>
                     </section>
 
                     <!-- Canbox API 提示 -->
@@ -197,7 +212,7 @@ npm run build-dist:win    # Windows包需要在windows下</code></pre>
                         <h3>canbox.json</h3>
                         <p data-zh="存储 Canbox 的全局设置，包括语言、字体和窗口配置。" data-en="Store Canbox global settings, including language, font, and window configuration.">存储 Canbox 的全局设置，包括语言、字体和窗口配置。</p>
                         <pre><code>{
-    "version": "0.1.4",
+    "version": "0.5.6",
     "language": "zh-CN",
     "font": "\"Microsoft YaHei\", sans-serif",
     "windowBounds": {

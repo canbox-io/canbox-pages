@@ -21,9 +21,13 @@ Canbox is a lightweight application runtime platform that provides minimal core 
 
 **Key Features:**
 - **App Management**: Supports installation, uninstallation, and updates of applications
-- **App Import**: Supports importing offline application packages, suitable for scenarios where apps cannot be publicly shared (e.g., internal enterprise tools, proprietary algorithms, sensitive data processing)
-- **Serverless Architecture**: Share apps via GitHub, Gitee, or import packaged apps directly
-- **Shortcuts**: Create shortcuts for frequently used applications
+- **WebApp Creation**: Turn any URL into a desktop app with auto site info scraping, navigation controls, and alias system
+- **App Import & Export**: Import offline app packages, export installed apps for sharing
+- **Shortcuts**: Create desktop and start menu shortcuts with alias support
+- **Auto Update**: Automatic update checking with GitHub and Gitee dual sources, configurable check frequency
+- **Customization**: Configurable language, font, data path, and window zoom (0.5x ~ 2.0x)
+- **Log Viewer**: Built-in log viewer with real-time monitoring, filtering, search, and export
+- **File Task Management**: Unified task management for download, import, export, and other file operations
 - **Multi-platform Support**: Based on Electron, supports Linux, Windows, and macOS
 
 ---

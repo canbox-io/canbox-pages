@@ -40,6 +40,7 @@
                             <li><a href="#files" data-zh="文件说明" data-en="File Description">文件说明</a></li>
                             <li><a href="#canbox-api" data-zh="Canbox API 提示" data-en="Canbox API Tips">Canbox API 提示</a></li>
                             <li><a href="#app-json">app.json</a></li>
+                            <li><a href="#webapp" data-zh="WebApp 网页应用" data-en="WebApp">WebApp 网页应用</a></li>
                             <li><a href="#uat-dev-json">uat.dev.json</a></li>
                             <li><a href="#preload-js">preload.js</a></li>
                             <li><a href="#cb-build-json">cb.build.json</a></li>
@@ -175,6 +176,20 @@
                                     <td data-zh="app 应用标识<br>1. 多段组成，如：com.gitee.dev001.clipboard<br>2. 每段都由小写字母和数字组成，且小写字母开头<br>3. 仅最后一段可以使用 - 符号" data-en="app identifier<br>1. Multiple segments, e.g., com.gitee.dev001.clipboard<br>2. Each segment consists of lowercase letters and numbers, starting with lowercase letters<br>3. Only the last segment can use the - symbol">app应用标识<br>1. 多段组成，如：com.gitee.dev001.clipboard<br>2. 每段都由小写字母和数字组成，且小写字母开头<br>3. 仅最后一段可以使用 - 符号</td>
                                 </tr>
                                 <tr>
+                                    <td>type</td>
+                                    <td></td>
+                                    <td>string</td>
+                                    <td>*</td>
+                                    <td data-zh="APP 类型，设为 &quot;webapp&quot; 表示网页应用，不填则为普通本地应用" data-en="APP type, set to &quot;webapp&quot; for web app, empty for normal local app">APP 类型，设为 <code>"webapp"</code> 表示网页应用，不填则为普通本地应用</td>
+                                </tr>
+                                <tr>
+                                    <td>alias</td>
+                                    <td></td>
+                                    <td>string</td>
+                                    <td>*</td>
+                                    <td data-zh="英文别名，用于快捷方式命名。中文名应用建议设置此字段，方便在快速启动工具中搜索" data-en="English alias for shortcut naming. Recommended for Chinese-named apps for easier search in launchers">英文别名，用于快捷方式命名。中文名应用建议设置此字段，方便在快速启动工具中搜索</td>
+                                </tr>
+                                <tr>
                                     <td>window</td>
                                     <td></td>
                                     <td>object</td>
@@ -225,6 +240,82 @@
                                 <tr><td>network</td><td data-zh="网络应用程序" data-en="Network application">网络应用程序</td></tr>
                             </tbody>
                         </table>
+                    </section>
+
+                    <!-- WebApp 网页应用 -->
+                    <section id="webapp" class="doc-section">
+                        <h2 data-zh="WebApp 网页应用" data-en="WebApp (Web Application)">WebApp 网页应用</h2>
+                        <p data-zh="Canbox 支持将任意网页封装为独立的桌面应用（WebApp）。与普通 APP 不同，WebApp 的 main 字段直接填入 HTTP URL，无需本地 HTML 文件。" data-en="Canbox supports wrapping any web page into an independent desktop application (WebApp). Unlike normal apps, WebApp's main field is an HTTP URL, no local HTML file is needed.">Canbox 支持将任意网页封装为独立的桌面应用（WebApp）。与普通 APP 不同，WebApp 的 <code>main</code> 字段直接填入 HTTP URL，无需本地 HTML 文件。</p>
+
+                        <h3 data-zh="app.json 示例" data-en="app.json Example">app.json 示例</h3>
+                        <pre><code>{
+    "id": "com.canbox.webapp.a1b2c3d4",
+    "name": "文心一言",
+    "alias": "yiyan",
+    "version": "1.0.0",
+    "description": "Web App: https://yiyan.baidu.com",
+    "author": "",
+    "logo": "logo.png",
+    "main": "https://yiyan.baidu.com",
+    "type": "webapp",
+    "webappOptions": {
+        "showNavbar": false
+    },
+    "window": {
+        "width": 1280,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600
+    }
+}</code></pre>
+
+                        <h3 data-zh="WebApp 特殊字段" data-en="WebApp Special Fields">WebApp 特殊字段</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-zh="字段" data-en="Field">字段</th>
+                                    <th data-zh="类型" data-en="Type">类型</th>
+                                    <th data-zh="说明" data-en="Description">说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>type</td>
+                                    <td>string</td>
+                                    <td data-zh="必须设为 &quot;webapp&quot;" data-en="Must be set to &quot;webapp&quot;">必须设为 <code>"webapp"</code></td>
+                                </tr>
+                                <tr>
+                                    <td>main</td>
+                                    <td>string</td>
+                                    <td data-zh="HTTP/HTTPS URL，即网页地址" data-en="HTTP/HTTPS URL, the web page address">HTTP/HTTPS URL，即网页地址</td>
+                                </tr>
+                                <tr>
+                                    <td>alias</td>
+                                    <td>string</td>
+                                    <td data-zh="英文别名，中文名应用建议设置" data-en="English alias, recommended for Chinese-named apps">英文别名，中文名应用建议设置</td>
+                                </tr>
+                                <tr>
+                                    <td>webappOptions</td>
+                                    <td>object</td>
+                                    <td data-zh="WebApp 专属选项" data-en="WebApp specific options">WebApp 专属选项</td>
+                                </tr>
+                                <tr>
+                                    <td>webappOptions.showNavbar</td>
+                                    <td>boolean</td>
+                                    <td data-zh="是否显示导航栏（后退/前进/刷新按钮），默认 false" data-en="Whether to show navigation bar (back/forward/refresh), default false">是否显示导航栏（后退/前进/刷新按钮），默认 false</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3 data-zh="WebApp 与普通 APP 的区别" data-en="Differences between WebApp and Normal APP">WebApp 与普通 APP 的区别</h3>
+                        <ul>
+                            <li data-zh="main 字段填入 HTTP URL，无需本地 HTML 文件" data-en="main field is an HTTP URL, no local HTML file needed">main 字段填入 HTTP URL，无需本地 HTML 文件</li>
+                            <li data-zh="asar 包内仅需 app.json + logo.png" data-en="Only app.json + logo.png inside the asar package">asar 包内仅需 app.json + logo.png</li>
+                            <li data-zh="支持导航快捷键：Alt + ← / →（后退/前进）、Ctrl + R / F5（刷新）" data-en="Supports navigation shortcuts: Alt + ←/→ (back/forward), Ctrl + R/F5 (refresh)">支持导航快捷键：Alt + ← / →（后退/前进）、Ctrl + R / F5（刷新）</li>
+                            <li data-zh="支持右键菜单：后退/前进/刷新/在浏览器中打开" data-en="Supports context menu: back/forward/refresh/open in browser">支持右键菜单：后退/前进/刷新/在浏览器中打开</li>
+                            <li data-zh="可配置导航栏显示（webappOptions.showNavbar）" data-en="Configurable navigation bar (webappOptions.showNavbar)">可配置导航栏显示（webappOptions.showNavbar）</li>
+                            <li data-zh="同源 target=&quot;_blank&quot; 链接在窗口内打开，而非外部浏览器" data-en="Same-origin target=&quot;_blank&quot; links open in-window instead of external browser">同源 target="_blank" 链接在窗口内打开，而非外部浏览器</li>
+                        </ul>
                     </section>
 
                     <!-- uat.dev.json -->

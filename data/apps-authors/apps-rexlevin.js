@@ -1,5 +1,4 @@
 // 作者：rexlevin
-// 作者：lizl6
 const jsonbox = {
     name: 'JsonBox',
     id: 'com.gitee.lizl6.cb-jsonbox',
