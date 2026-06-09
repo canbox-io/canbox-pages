@@ -24,7 +24,6 @@ Canbox is a lightweight application runtime platform that provides minimal core 
 - **WebApp Creation**: Turn any URL into a desktop app with auto site info scraping, navigation controls, and alias system
 - **App Import & Export**: Import offline app packages, export installed apps for sharing
 - **Shortcuts**: Create desktop and start menu shortcuts with alias support
-- **Launcher**: Global hotkey to quickly search and launch apps with Chinese pinyin matching
 - **Auto Update**: Automatic update checking with GitHub and Gitee dual sources, configurable check frequency
 - **Customization**: Configurable language, font, data path, and window zoom (0.5x ~ 2.0x)
 - **Log Viewer**: Built-in log viewer with real-time monitoring, filtering, search, and export
