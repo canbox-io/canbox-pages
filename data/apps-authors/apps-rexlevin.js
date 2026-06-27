@@ -1,7 +1,7 @@
 // 作者：rexlevin
 const jsonbox = {
     name: 'JsonBox',
-    id: 'com.gitee.lizl6.cb-jsonbox',
+    id: 'com.github.rexlevin.cb-jsonbox',
     description: 'JSON 格式化工具，支持 JSON 转换为 XML、YAML、CSV 等多种格式。',
     description_en: 'JSON formatter, supports conversion to XML, YAML, CSV and other formats.',
     author: 'rexlevin',

@@ -1,6 +1,6 @@
 # Canbox Pages
 
-Canbox 项目的 static website, hosted on GitHub Pages and Gitee Pages.
+Canbox 项目的 static website, hosted on GitHub Pages.
 
 ---
 
@@ -24,7 +24,7 @@ Canbox is a lightweight application runtime platform that provides minimal core 
 - **WebApp Creation**: Turn any URL into a desktop app with auto site info scraping, navigation controls, and alias system
 - **App Import & Export**: Import offline app packages, export installed apps for sharing
 - **Shortcuts**: Create desktop and start menu shortcuts with alias support
-- **Auto Update**: Automatic update checking with GitHub and Gitee dual sources, configurable check frequency
+- **Auto Update**: Automatic update checking with GitHub, configurable check frequency
 - **Customization**: Configurable language, font, data path, and window zoom (0.5x ~ 2.0x)
 - **Log Viewer**: Built-in log viewer with real-time monitoring, filtering, search, and export
 - **File Task Management**: Unified task management for download, import, export, and other file operations
@@ -42,7 +42,7 @@ Canbox is a lightweight application runtime platform that provides minimal core 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/rexlevin/canbox-pages.git
+git clone https://github.com/canbox-io/canbox-pages.git
 cd canbox-pages
 ```
 
@@ -68,13 +68,6 @@ npx serve
 2. Enable GitHub Pages in repository settings
 3. Select default branch (main/master)
 4. Visit https://yourusername.github.io/canbox-pages/
-
-### Gitee Pages
-
-1. Push to Gitee repository
-2. Enable Gitee Pages in repository settings
-3. Select default branch and update
-4. Visit https://yourusername.gitee.io/canbox-pages/
 
 ## Directory Structure
 
@@ -107,7 +100,7 @@ canbox-pages/
 
 ## Customization
 
-- Update links: Modify GitHub/Gitee links in `index.html`
+- Update links: Modify GitHub links in `index.html`
 - Modify styles: Customize colors and layout in `styles/main.css`
 - Add images: Place images in the `images/` directory
 
