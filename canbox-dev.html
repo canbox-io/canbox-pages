@@ -38,19 +38,23 @@
                         <h3 data-zh="目录" data-en="Table of Contents">目录</h3>
                         <ul>
                             <li><a href="#contribution" data-zh="贡献指南" data-en="Contribution Guide">贡献指南</a></li>
-                            <li><a href="#project-structure" data-zh="项目结构" data-en="Project Structure">项目结构</a></li>
-                            <li><a href="#debug" data-zh="调试" data-en="Debug">调试</a></li>
-                            <li><a href="#build" data-zh="编译打包" data-en="Build and Package">编译打包</a></li>
-                            <li><a href="#canbox-api" data-zh="Canbox API 提示" data-en="Canbox API Tips">Canbox API 提示</a></li>
-                            <li><a href="#repos" data-zh="仓库管理" data-en="Repo Management">repos</a></li>
-                            <li><a href="#electron-store" data-zh="electron-store" data-en="electron-store">electron-store</a></li>
+                            <li><a href="#architecture" data-zh="架构总览" data-en="Architecture">架构总览</a></li>
+                            <li><a href="#core" data-zh="canbox-core" data-en="canbox-core">canbox-core</a></li>
+                            <li><a href="#manager" data-zh="canbox-manager" data-en="canbox-manager">canbox-manager</a></li>
+                            <li><a href="#developer" data-zh="canbox-developer" data-en="canbox-developer">canbox-developer</a></li>
+                            <li><a href="#data-structure" data-zh="数据目录结构" data-en="Data Directory">数据目录结构</a></li>
+                            <li><a href="#app-launch" data-zh="APP 启动流程" data-en="APP Launch">APP 启动流程</a></li>
+                            <li><a href="#build" data-zh="构建与发布" data-en="Build & Release">构建与发布</a></li>
+                            <li><a href="#repos" data-zh="仓库管理" data-en="Repo Management">仓库管理</a></li>
                         </ul>
                     </nav>
                 </aside>
 
                 <!-- 文档主体 -->
                 <div class="docs-content">
-                    <h1 data-zh="Canbox 开发文档" data-en="Canbox Development Documentation">CanBox开发</h1>
+                    <h1 data-zh="Canbox 开发文档" data-en="Canbox Development Documentation">Canbox 开发文档</h1>
+
+                    <p data-zh="本文档面向 Canbox 平台贡献者，描述平台的三层架构设计、各模块职责、数据目录结构以及构建发布流程。" data-en="This document is for Canbox platform contributors, describing the three-layer architecture, module responsibilities, data directory structure, and build/release flow.">本文档面向 Canbox 平台贡献者，描述平台的三层架构设计、各模块职责、数据目录结构以及构建发布流程。</p>
 
                     <!-- 贡献指南 -->
                     <section id="contribution" class="doc-section">
@@ -58,136 +62,371 @@
                         <ol>
                             <li data-zh="fork 代码" data-en="Fork the code">fork 代码</li>
                             <li data-zh="提交修改" data-en="Submit changes">提交修改</li>
-                            <li data-zh="提交 pr" data-en="Submit PR">提交pr</li>
+                            <li data-zh="提交 pr" data-en="Submit PR">提交 pr</li>
                             <li data-zh="等待合并 😁" data-en="Wait for merge 😁">等待合并 😁</li>
                         </ol>
+                        <p data-zh="Canbox 采用多仓库组织形式，核心仓库包括 canbox-core、canbox-manager、canbox-developer，各仓库独立版本管理，通过共享文件系统（store/db）协作。" data-en="Canbox uses a multi-repo organization. Core repos include canbox-core, canbox-manager, and canbox-developer. Each repo is versioned independently and collaborates via shared filesystem (store/db).">Canbox 采用多仓库组织形式，核心仓库包括 canbox-core、canbox-manager、canbox-developer，各仓库独立版本管理，通过共享文件系统（store/db）协作。</p>
                     </section>
 
-                    <!-- 项目结构 -->
-                    <section id="project-structure" class="doc-section">
-                        <h2 data-zh="项目结构" data-en="Project Structure">项目结构</h2>
-                        <pre><code>canbox/
-├── dist/                  # 构建输出目录
-├── locales/               # 国际化语言文件
-├── modules/               # 核心模块
-│   ├── auto-update/       # 自动更新
-│   ├── childprocess/      # 子进程管理
-│   ├── core/              # 核心工具（db、dialog、sudo、win等）
-│   ├── execution/         # 执行分发
-│   ├── file-task/         # 文件任务管理
-│   ├── integrated/        # 集成窗口
-│   ├── ipc/               # IPC 处理器
-│   ├── main/              # 主进程核心（appManager、storageManager、pathManager等）
-│   ├── services/          # 服务模块
-│   └── web-app/           # 网页应用创建
-├── public/                # 静态资源
-├── src/                   # 前端 Vue 源码
-├── types/                 # TypeScript 类型定义
-├── main.js                # 主进程入口
-├── preload.js             # 预加载脚本
-├── ipcHandlers.js         # IPC 通信处理
-├── tray.js                # 托盘管理
-└── package.json           # 项目配置</code></pre>
-                    </section>
+                    <!-- 架构总览 -->
+                    <section id="architecture" class="doc-section">
+                        <h2 data-zh="架构总览" data-en="Architecture Overview">架构总览</h2>
+                        <p data-zh="Canbox 采用 core 注入 + 多 APP 进程模型，三层设计各司其职：" data-en="Canbox uses a core-injection + multi-APP process model, with a three-layer design where each layer has its own responsibility:">Canbox 采用 core 注入 + 多 APP 进程模型，三层设计各司其职：</p>
 
-                    <!-- 调试 -->
-                    <section id="debug" class="doc-section">
-                        <h2 data-zh="调试" data-en="Debug">调试</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-zh="层" data-en="Layer">层</th>
+                                    <th data-zh="定位" data-en="Role">定位</th>
+                                    <th data-zh="职责" data-en="Responsibility">职责</th>
+                                    <th data-zh="是否必需" data-en="Required">是否必需</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>canbox-core</strong></td>
+                                    <td data-zh="环境层（服务提供层）" data-en="Environment (Service Provider)">环境层（服务提供层）</td>
+                                    <td data-zh="通过 electron -r 预加载，提供统一运行时环境与可选公共服务（store/db/dialog 等）" data-en="Preloaded via electron -r, provides unified runtime environment and optional public services (store/db/dialog, etc.)">通过 <code>electron -r</code> 预加载，提供统一运行时环境与可选公共服务（store/db/dialog 等）</td>
+                                    <td data-zh="可选" data-en="Optional">可选</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>canbox-manager</strong></td>
+                                    <td data-zh="管理器 APP" data-en="Manager APP">管理器 APP</td>
+                                    <td data-zh="APP 注册管理、仓库管理、系统设置（普通 APP，无特殊权限）" data-en="APP registry management, repo management, system settings (ordinary APP, no special privileges)">APP 注册管理、仓库管理、系统设置（普通 APP，无特殊权限）</td>
+                                    <td data-zh="可选" data-en="Optional">可选</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>canbox-developer</strong></td>
+                                    <td data-zh="开发工具 APP" data-en="Developer Tool APP">开发工具 APP</td>
+                                    <td data-zh="APP 的调试启动、打包发布等开发便利（普通 APP，无特殊权限）" data-en="APP debug launch, packaging and publishing convenience (ordinary APP, no special privileges)">APP 的调试启动、打包发布等开发便利（普通 APP，无特殊权限）</td>
+                                    <td data-zh="可选" data-en="Optional">可选</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3 data-zh="核心原则" data-en="Core Principles">核心原则</h3>
                         <ul>
-                            <li data-zh="启动开发服务器：" data-en="Start development server:">启动开发服务器：
-                                <pre><code>npm run dev</code></pre>
-                            </li>
-                            <li data-zh="调试主进程：" data-en="Debug main process:">调试主进程：
-                                <pre><code>npm run start</code></pre>
-                            </li>
+                            <li data-zh="APP 首先是标准 Electron 应用，canbox-core / canbox-developer 只是服务层和工具层，不是 APP 运行的前提" data-en="An APP is first and foremost a standard Electron app; canbox-core / canbox-developer are just service and tool layers, not prerequisites for an APP to run"><strong>APP 首先是标准 Electron 应用</strong>，canbox-core / canbox-developer 只是服务层和工具层，不是 APP 运行的前提</li>
+                            <li data-zh="canbox-core 是环境层，不是框架。隐性能力对 APP 透明，显性 API 通过 IPC 按需调用" data-en="canbox-core is an environment layer, not a framework. Implicit capabilities are transparent to APPs; explicit APIs are invoked via IPC on demand"><strong>canbox-core 是环境层，不是框架</strong>。隐性能力对 APP 透明，显性 API 通过 IPC 按需调用</li>
+                            <li data-zh="canbox-manager / canbox-developer 都是普通 APP，不拥有特殊权限，通过 electron -r canbox-core/injection.js 启动" data-en="canbox-manager / canbox-developer are both ordinary APPs, with no special privileges, launched via electron -r canbox-core/injection.js"><strong>canbox-manager / canbox-developer 都是普通 APP</strong>，不拥有特殊权限，通过 <code>electron -r canbox-core/injection.js</code> 启动</li>
+                            <li data-zh="各 APP 进程独立，通过共享文件系统（store/db）通信，而非 IPC" data-en="Each APP process is independent, communicating via shared filesystem (store/db) rather than IPC"><strong>各 APP 进程独立</strong>，通过共享文件系统（store/db）通信，而非 IPC</li>
+                            <li data-zh="store/db 黑盒式，APP 调用时不传 appId，由 core 从 --app-id 自动路由到 data/{appId}/" data-en="store/db are black-box; APPs do not pass appId, core auto-routes from --app-id to data/{appId}/"><strong>store/db 黑盒式</strong>，APP 调用时不传 appId，由 core 从 <code>--app-id</code> 自动路由到 <code>data/{appId}/</code></li>
+                        </ul>
+
+                        <h3 data-zh="架构图" data-en="Architecture Diagram">架构图</h3>
+                        <pre><code>┌─────────────────────────────────────────────────────┐
+│                    Electron 运行时                    │
+│                                                     │
+│  electron -r canbox-core/injection.js {APP}/        │
+│       --app-id={appId}                              │
+│       │                                             │
+│       ▼                                             │
+│  ┌─────────────────────────────────┐                │
+│  │     canbox-core（环境层）        │                │
+│  │  阶段1: 环境初始化（隐性能力）    │                │
+│  │    - userData 路径 + config.json │                │
+│  │    - UsersBase 计算 + Users 目录  │                │
+│  │    --app-id 解析 → appId         │                │
+│  │  阶段2: API 注册（IPC handlers） │                │
+│  │    - store/db 黑盒路由（按 appId）│               │
+│  │    - 写 core.injectionPath       │                │
+│  │  阶段3: 运行时初始化（logger）   │                │
+│  └─────────────────────────────────┘                │
+│       │                                             │
+│       ▼                                             │
+│  ┌─────────────────────────────────┐                │
+│  │  APP main.js（普通 Node.js 入口）│                │
+│  └─────────────────────────────────┘                │
+│                                                     │
+│  所有 APP（含 canbox-manager）均通过同一机制启动      │
+└─────────────────────────────────────────────────────┘</code></pre>
+                    </section>
+
+                    <!-- canbox-core -->
+                    <section id="core" class="doc-section">
+                        <h2 data-zh="canbox-core（环境层）" data-en="canbox-core (Environment Layer)">canbox-core（环境层）</h2>
+                        <p data-zh="canbox-core 是 Canbox 的核心注入模块，通过 Electron -r（require）标志在 APP 主进程启动前预加载，提供统一运行时环境与可选公共服务。" data-en="canbox-core is the core injection module of Canbox, preloaded via Electron's -r (require) flag before the APP main process starts, providing a unified runtime environment and optional public services.">canbox-core 是 Canbox 的核心注入模块，通过 Electron <code>-r</code>（require）标志在 APP 主进程启动前预加载，提供统一运行时环境与可选公共服务。</p>
+
+                        <h3 data-zh="目录结构" data-en="Directory Structure">目录结构</h3>
+                        <pre><code>canbox-core/
+├── injection.js          # 三阶段编排入口（环境 → API → 运行时）
+├── lib/                 # 模块化功能库
+│   ├── env.js           # 环境初始化（隐性能力）
+│   ├── logger.js        # 统一日志
+│   ├── store.js         # 键值存储（electron-store）
+│   ├── db.js            # 文档数据库（PouchDB）
+│   ├── dialog.js        # 原生对话框
+│   ├── window.js        # 窗口管理 / 通知
+│   ├── lifecycle.js     # 生命周期回调
+│   ├── shortcut.js      # 全局快捷键
+│   ├── sudo.js          # 提权执行
+│   └── misc.js          # 杂项功能
+└── package.json</code></pre>
+
+                        <h3 data-zh="三阶段启动机制" data-en="Three-Phase Startup Mechanism">三阶段启动机制</h3>
+                        <p data-zh="injection.js 执行三个阶段：" data-en="injection.js executes three phases:"><code>injection.js</code> 执行三个阶段：</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-zh="阶段" data-en="Phase">阶段</th>
+                                    <th data-zh="时机" data-en="Timing">时机</th>
+                                    <th data-zh="内容" data-en="Content">内容</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td data-zh="阶段1：环境初始化" data-en="Phase 1: Environment Init">阶段1：环境初始化</td>
+                                    <td data-zh="require(injection.js) 时立即执行" data-en="Executed immediately when require(injection.js)"><code>require(injection.js)</code> 时立即执行</td>
+                                    <td data-zh="userData 路径、config.json 读取 customDataRoot、UsersBase 计算、Users 目录创建、--app-id 解析、module-alias 注册" data-en="userData path, read customDataRoot from config.json, compute UsersBase, create Users directories, parse --app-id, register module-alias">userData 路径、config.json 读取 customDataRoot、UsersBase 计算、Users 目录创建、<code>--app-id</code> 解析、module-alias 注册</td>
+                                </tr>
+                                <tr>
+                                    <td data-zh="阶段2：API 注册" data-en="Phase 2: API Registration">阶段2：API 注册</td>
+                                    <td data-zh="同上（同步）" data-en="Same (synchronous)">同上（同步）</td>
+                                    <td data-zh="注册所有 ipcMain.handle IPC handlers（store/db 按 appId 黑盒路由）；写 core.injectionPath 到 {Users}/canbox.json" data-en="Register all ipcMain.handle IPC handlers (store/db black-box routing by appId); write core.injectionPath to {Users}/canbox.json">注册所有 <code>ipcMain.handle</code> IPC handlers（store/db 按 appId 黑盒路由）；写 <code>core.injectionPath</code> 到 <code>{Users}/canbox.json</code></td>
+                                </tr>
+                                <tr>
+                                    <td data-zh="阶段3：运行时初始化" data-en="Phase 3: Runtime Init">阶段3：运行时初始化</td>
+                                    <td data-zh="app.whenReady() 后" data-en="After app.whenReady()"><code>app.whenReady()</code> 后</td>
+                                    <td data-zh="初始化 log4js logger（写入 {Users}/logs/canbox.log）" data-en="Initialize log4js logger (writes to {Users}/logs/canbox.log)">初始化 log4js logger（写入 <code>{Users}/logs/canbox.log</code>）</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3 data-zh="隐性能力（对 APP 透明）" data-en="Implicit Capabilities (Transparent to APP)">隐性能力（对 APP 透明）</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-zh="能力" data-en="Capability">能力</th>
+                                    <th data-zh="实现" data-en="Implementation">实现</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td data-zh="统一 userData 路径" data-en="Unified userData path">统一 userData 路径</td><td data-zh="app.setPath('userData', ~/.config/canbox/)" data-en="app.setPath('userData', ~/.config/canbox/)"><code>app.setPath('userData', ~/.config/canbox/)</code></td></tr>
+                                <tr><td data-zh="config.json + customDataRoot" data-en="config.json + customDataRoot">config.json + customDataRoot</td><td data-zh="读取 customDataRoot 计算 UsersBase" data-en="Read customDataRoot to compute UsersBase">读取 customDataRoot 计算 UsersBase</td></tr>
+                                <tr><td data-zh="Users 目录结构" data-en="Users directory structure">Users 目录结构</td><td data-zh="自动创建 apps/data/db/repos/temp/logs 子目录" data-en="Auto-create apps/data/db/repos/temp/logs subdirectories">自动创建 apps/data/db/repos/temp/logs 子目录</td></tr>
+                                <tr><td data-zh="appId 解析" data-en="appId parsing">appId 解析</td><td data-zh="从 --app-id= 或 package.json name 读取" data-en="Read from --app-id= or package.json name">从 <code>--app-id=</code> 或 package.json name 读取</td></tr>
+                                <tr><td data-zh="统一日志" data-en="Unified logging">统一日志</td><td data-zh="log4js 写入 {Users}/logs/canbox.log" data-en="log4js writes to {Users}/logs/canbox.log">log4js 写入 <code>{Users}/logs/canbox.log</code></td></tr>
+                            </tbody>
+                        </table>
+
+                        <h3 data-zh="显性 API（29 个 IPC 通道）" data-en="Explicit API (29 IPC Channels)">显性 API（29 个 IPC 通道）</h3>
+                        <p data-zh="所有 API 通过 window.api.xxx 调用（由各 APP 的 preload.js contextBridge 暴露）。store/db 为黑盒式，APP 不传 appId，由 core 自动路由到 data/{appId}/。" data-en="All APIs are invoked via window.api.xxx (exposed by each APP's preload.js contextBridge). store/db are black-box; APPs do not pass appId, core auto-routes to data/{appId}/.">所有 API 通过 <code>window.api.xxx</code> 调用（由各 APP 的 preload.js <code>contextBridge</code> 暴露）。store/db 为黑盒式，APP 不传 appId，由 core 自动路由到 <code>data/{appId}/</code>。</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-zh="模块" data-en="Module">模块</th>
+                                    <th data-zh="通道数" data-en="Channels">通道数</th>
+                                    <th data-zh="主要功能" data-en="Main Functions">主要功能</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>store</td><td>4</td><td data-zh="键值存储（get/set/delete/clear）" data-en="Key-value storage (get/set/delete/clear)">键值存储（get/set/delete/clear）</td></tr>
+                                <tr><td>db</td><td>7</td><td data-zh="文档数据库（put/get/allDocs/bulkDocs/remove/find/createIndex）" data-en="Document database (put/get/allDocs/bulkDocs/remove/find/createIndex)">文档数据库（put/get/allDocs/bulkDocs/remove/find/createIndex）</td></tr>
+                                <tr><td>dialog</td><td>3</td><td data-zh="原生对话框（showMessageBox/showOpenDialog/showSaveDialog）" data-en="Native dialogs (showMessageBox/showOpenDialog/showSaveDialog)">原生对话框（showMessageBox/showOpenDialog/showSaveDialog）</td></tr>
+                                <tr><td>window</td><td>2</td><td data-zh="窗口管理（createWindow/notification）" data-en="Window management (createWindow/notification)">窗口管理（createWindow/notification）</td></tr>
+                                <tr><td>lifecycle</td><td>1</td><td data-zh="生命周期（registerCloseCallback）" data-en="Lifecycle (registerCloseCallback)">生命周期（registerCloseCallback）</td></tr>
+                                <tr><td>shortcut</td><td>3</td><td data-zh="全局快捷键（register/unregister/isRegistered）" data-en="Global shortcuts (register/unregister/isRegistered)">全局快捷键（register/unregister/isRegistered）</td></tr>
+                                <tr><td>sudo</td><td>1</td><td data-zh="提权执行（exec）" data-en="Privileged execution (exec)">提权执行（exec）</td></tr>
+                                <tr><td>misc</td><td>8</td><td data-zh="杂项（hello/openUrl/getUserData/getCoreVersion/getCorePath/getPlatformInfo/showItemInFolder/openPath）" data-en="Miscellaneous (hello/openUrl/getUserData/getCoreVersion/getCorePath/getPlatformInfo/showItemInFolder/openPath)">杂项（hello/openUrl/getUserData/getCoreVersion/getCorePath/getPlatformInfo/showItemInFolder/openPath）</td></tr>
+                            </tbody>
+                        </table>
+                        <p data-zh="API 详细签名请参阅 API 文档。" data-en="For detailed API signatures, please refer to the API Documentation.">API 详细签名请参阅 <a href="./docs.html">API 文档</a>。</p>
+
+                        <h3 data-zh="全局变量" data-en="Global Variables">全局变量</h3>
+                        <p data-zh="injection.js 预加载时将 env 和 corePath 挂到全局变量，供 APP 主进程直接读取（APP 不 npm install canbox-core）：" data-en="injection.js mounts env and corePath onto global variables during preload, so the APP main process can read them directly (APPs do not npm install canbox-core):"><code>injection.js</code> 预加载时将 env 和 corePath 挂到全局变量，供 APP 主进程直接读取（APP 不 npm install canbox-core）：</p>
+                        <pre><code>global.__CANBOX_ENV__ = env;              // { userData, usersBase, usersPath, appId }
+global.__CANBOX_CORE_PATH__ = path.resolve(__dirname);  // canbox-core 根目录</code></pre>
+                    </section>
+
+                    <!-- canbox-manager -->
+                    <section id="manager" class="doc-section">
+                        <h2 data-zh="canbox-manager（管理器 APP）" data-en="canbox-manager (Manager APP)">canbox-manager（管理器 APP）</h2>
+                        <p data-zh="canbox-manager 是 Canbox 的管理器 APP，负责 APP 管理（导入/删除/启动/清理数据）、仓库管理（添加/删除/同步）、系统设置（语言/自启/字体/日志保留）。" data-en="canbox-manager is the manager APP of Canbox, responsible for APP management (import/delete/launch/clear data), repo management (add/delete/sync), and system settings (language/autostart/font/log retention).">canbox-manager 是 Canbox 的管理器 APP，负责 APP 管理（导入/删除/启动/清理数据）、仓库管理（添加/删除/同步）、系统设置（语言/自启/字体/日志保留）。</p>
+
+                        <p data-zh="关键约束：canbox-manager 是普通 APP，通过 electron -r canbox-core/injection.js canbox-manager/ --app-id=canbox-manager 启动，不拥有特殊权限。" data-en="Key constraint: canbox-manager is an ordinary APP, launched via electron -r canbox-core/injection.js canbox-manager/ --app-id=canbox-manager, with no special privileges."><strong>关键约束</strong>：canbox-manager 是普通 APP，通过 <code>electron -r canbox-core/injection.js canbox-manager/ --app-id=canbox-manager</code> 启动，不拥有特殊权限。</p>
+
+                        <h3 data-zh="目录结构" data-en="Directory Structure">目录结构</h3>
+                        <pre><code>canbox-manager/
+├── main.js                 # Electron 主进程 + manager 专用 IPC handlers
+├── preload.js              # contextBridge（canbox-core API + manager API）
+├── vite.config.mjs         # Vite 构建配置
+├── index.html              # HTML 入口
+├── package.json
+└── src/                   # Vue 前端源码
+    ├── main.js             # Vue 3 入口
+    ├── App.vue             # 左侧图标导航 + 右侧内容区
+    ├── router/index.js     # 4 路由（Apps / Repos / Settings / About）
+    ├── stores/             # Pinia stores
+    ├── views/              # 页面组件
+    ├── i18n/               # 国际化
+    ├── utils/              # 工具函数
+    └── assets/             # 静态资源</code></pre>
+
+                        <h3 data-zh="Manager 专用 IPC Handlers" data-en="Manager-Specific IPC Handlers">Manager 专用 IPC Handlers</h3>
+                        <p data-zh="canbox-manager 的 main.js 在 canbox-core API 基础上，额外注册了 manager 专用 IPC handlers。manager 作为普通 APP，自己的设置/仓库元数据通过 core store 存到 data/canbox-manager/store/（黑盒路由，appId=canbox-manager）。" data-en="canbox-manager's main.js registers manager-specific IPC handlers in addition to canbox-core APIs. As an ordinary APP, its own settings/repo metadata are stored via core store to data/canbox-manager/store/ (black-box routing, appId=canbox-manager).">canbox-manager 的 <code>main.js</code> 在 canbox-core API 基础上，额外注册了 manager 专用 IPC handlers。manager 作为普通 APP，自己的设置/仓库元数据通过 core store 存到 <code>data/canbox-manager/store/</code>（黑盒路由，appId=canbox-manager）。</p>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-zh="类别" data-en="Category">类别</th>
+                                    <th data-zh="通道数" data-en="Channels">通道数</th>
+                                    <th data-zh="主要功能" data-en="Main Functions">主要功能</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td data-zh="APP 管理" data-en="APP Management">APP 管理</td><td>5</td><td data-zh="list / import / remove / launch / clearData" data-en="list / import / remove / launch / clearData">list / import / remove / launch / clearData</td></tr>
+                                <tr><td data-zh="仓库管理" data-en="Repo Management">仓库管理</td><td>4</td><td data-zh="list / add / remove / sync" data-en="list / add / remove / sync">list / add / remove / sync</td></tr>
+                                <tr><td data-zh="设置" data-en="Settings">设置</td><td>3</td><td data-zh="get / set / getAll" data-en="get / set / getAll">get / set / getAll</td></tr>
+                                <tr><td data-zh="文件任务" data-en="File Tasks">文件任务</td><td>3</td><td data-zh="create / cancel / list" data-en="create / cancel / list">create / cancel / list</td></tr>
+                                <tr><td data-zh="缩放" data-en="Zoom">缩放</td><td>3 + 1 事件</td><td data-zh="get / set / reset / onZoomChanged" data-en="get / set / reset / onZoomChanged">get / set / reset / onZoomChanged</td></tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <!-- canbox-developer -->
+                    <section id="developer" class="doc-section">
+                        <h2 data-zh="canbox-developer（开发工具 APP）" data-en="canbox-developer (Developer Tool APP)">canbox-developer（开发工具 APP）</h2>
+                        <p data-zh="canbox-developer 是 Canbox 的开发工具 APP，提供 APP 的调试启动、打包发布等开发便利。与 canbox-manager 一样，它也是普通 APP，不拥有特殊权限。" data-en="canbox-developer is the development tool APP of Canbox, providing APP debug launch, packaging and publishing convenience. Like canbox-manager, it is an ordinary APP with no special privileges.">canbox-developer 是 Canbox 的开发工具 APP，提供 APP 的调试启动、打包发布等开发便利。与 canbox-manager 一样，它也是普通 APP，不拥有特殊权限。</p>
+
+                        <h3 data-zh="目录结构" data-en="Directory Structure">目录结构</h3>
+                        <pre><code>canbox-developer/
+├── main.js                # Electron 主进程 + developer 专用 IPC handlers
+├── preload.js             # contextBridge（canbox-core API + developer API）
+├── vite.config.mjs        # Vite 构建配置
+├── index.html             # HTML 入口
+├── package.json
+├── docs/
+│   └── APP_DEV.md         # APP 开发指南
+└── src/                   # Vue 前端源码
+    ├── main.js            # Vue 3 入口
+    ├── App.vue            # 主布局
+    ├── router/index.js    # 路由配置
+    ├── stores/            # Pinia stores
+    ├── views/             # 页面组件（ProjectsView 等）
+    ├── i18n/              # 国际化
+    ├── utils/             # 工具函数
+    └── assets/            # 静态资源</code></pre>
+
+                        <h3 data-zh="主要功能" data-en="Main Features">主要功能</h3>
+                        <ul>
+                            <li data-zh="调试启动：选择项目目录，用 name 作 appId 启动（--app-id={pkg.name}），显式设置 NODE_ENV=development" data-en="Debug launch: select project directory, launch with name as appId (--app-id={pkg.name}), explicitly set NODE_ENV=development"><strong>调试启动</strong>：选择项目目录，用 <code>name</code> 作 appId 启动（<code>--app-id={pkg.name}</code>），显式设置 <code>NODE_ENV=development</code></li>
+                            <li data-zh="打包发布：将 APP 打包为 zip 格式（含 app.asar），支持发布到 GitHub Releases" data-en="Packaging: package APP as zip (with app.asar), supports publishing to GitHub Releases"><strong>打包发布</strong>：将 APP 打包为 zip 格式（含 app.asar），支持发布到 GitHub Releases</li>
+                            <li data-zh="项目元数据读取：从 package.json 读取 APP 元数据（id/name/version/description 等）" data-en="Project metadata reading: read APP metadata from package.json (id/name/version/description, etc.)"><strong>项目元数据读取</strong>：从 package.json 读取 APP 元数据（id/name/version/description 等）</li>
                         </ul>
                     </section>
 
-                    <!-- 编译打包 -->
-                    <section id="build" class="doc-section">
-                        <h2 data-zh="编译打包" data-en="Build and Package">编译打包</h2>
-                        <pre><code># 1 克隆项目
-git clone https://github.com/canbox-io/canbox.git
+                    <!-- 数据目录结构 -->
+                    <section id="data-structure" class="doc-section">
+                        <h2 data-zh="数据目录结构" data-en="Data Directory Structure">数据目录结构</h2>
+                        <pre><code>~/.config/canbox/                      # app.getPath('userData')，固定不变
+├── config.json                        # 系统配置（customDataRoot 等），永远在此
+└── （customDataRoot 未设时，业务数据根 = 此目录）
 
-# 2 安装依赖：
-npm install
+{UsersBase}/Users/                     # 业务数据根（可由 customDataRoot 整体搬迁）
+├── apps/{appId}/                      # 已安装 APP（manager 导入/repo下载时命名）
+├── data/{appId}/
+│   ├── store/{name}.json             # APP 键值存储（按 appId 物理隔离）
+│   └── db/                           # APP 文档数据库（按 appId 物理隔离）
+├── db/
+│   ├── history/                      # 平台级操作历史
+│   └── fileTask/                     # 平台级文件任务
+├── repos/                             # 仓库克隆
+├── temp/
+│   ├── apps/                         # APP 临时文件
+│   └── repos/                        # 仓库临时文件
+├── logs/
+│   └── canbox.log                    # 统一日志
+└── canbox.json                        # 平台级配置（core.injectionPath、core.version）</code></pre>
 
-# 3 vite编译
-npm run build
-
-# 4 打包
-npm run build-dist        # 构建 Electron 目录（Vite 编译 + asar 打包）
-npm run build-exe         # 构建 Windows exe（需在 Windows 下）
-npm run build-appimage    # 构建 Linux AppImage（需在 Linux 下）</code></pre>
+                        <h3 data-zh="数据隔离模型（黑盒）" data-en="Data Isolation Model (Black-box)">数据隔离模型（黑盒）</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-zh="层面" data-en="Layer">层面</th>
+                                    <th data-zh="机制" data-en="Mechanism">机制</th>
+                                    <th data-zh="APP 是否感知" data-en="APP Aware">APP 是否感知</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>store</td><td data-zh="data/{appId}/store/{name}.json" data-en="data/{appId}/store/{name}.json"><code>data/{appId}/store/{name}.json</code></td><td data-zh="否，调 store.set('name','key',val) 自动路由" data-en="No, calling store.set('name','key',val) auto-routes">否，调 <code>store.set('name','key',val)</code> 自动路由</td></tr>
+                                <tr><td>db</td><td data-zh="data/{appId}/db/" data-en="data/{appId}/db/"><code>data/{appId}/db/</code></td><td data-zh="否，调 db.put(doc) 自动路由" data-en="No, calling db.put(doc) auto-routes">否，调 <code>db.put(doc)</code> 自动路由</td></tr>
+                                <tr><td data-zh="平台级 db" data-en="Platform db">平台级 db</td><td data-zh="db/{history,fileTask}/" data-en="db/{history,fileTask}/"><code>db/{history,fileTask}/</code></td><td data-zh="否，仅 manager 主进程直接引用" data-en="No, only manager main process references directly">否，仅 manager 主进程直接引用</td></tr>
+                            </tbody>
+                        </table>
+                        <p data-zh="删 APP 清数据 = rm -rf data/{appId}/，干净利落。" data-en="Clearing APP data = rm -rf data/{appId}/, clean and simple."><strong>删 APP 清数据</strong> = <code>rm -rf data/{appId}/</code>，干净利落。</p>
                     </section>
 
-                    <!-- Canbox API 提示 -->
-                    <section id="canbox-api" class="doc-section">
-                        <h2 data-zh="Canbox API 提示" data-en="Canbox API Tips">CanBox API提示</h2>
+                    <!-- APP 启动流程 -->
+                    <section id="app-launch" class="doc-section">
+                        <h2 data-zh="APP 启动流程" data-en="APP Launch Flow">APP 启动流程</h2>
+                        <h3 data-zh="启动命令" data-en="Launch Command">启动命令</h3>
+                        <pre><code>electron -r canbox-core/injection.js /path/to/app/ --app-id={appId} --no-sandbox</code></pre>
+
+                        <h3 data-zh="执行顺序" data-en="Execution Order">执行顺序</h3>
                         <ol>
-                            <li data-zh="安装 typescript：npm i -D typescript" data-en="Install typescript: npm i -D typescript">安装 <code>typescript</code> ： <code>npm i -D typescript</code></li>
-                            <li data-zh="在项目根目录下创建目录 types，将 canbox.d.ts 放到 types 目录中" data-en="Create a types directory in the project root, and put canbox.d.ts into the types directory">在项目根目录下创建目录  <code>types</code>，将 <code>canbox.d.ts</code> 放到 <code>types</code> 目录中</li>
-                            <li data-zh="在项目根目录下创建 tsconfig.json 或 jsconfig.json 文件" data-en="Create tsconfig.json or jsconfig.json file in the project root">在项目根目录下创建 <code>tsconfig.json</code> 或 <code>jsconfig.json</code> 文件</li>
+                            <li data-zh="Node.js 加载 canbox-core/injection.js（阶段1 + 阶段2）" data-en="Node.js loads canbox-core/injection.js (Phase 1 + Phase 2)">Node.js 加载 <code>canbox-core/injection.js</code>（阶段1 + 阶段2）</li>
+                            <li data-zh="阶段1：env.js 设置 userData、读 config.json、计算 UsersBase、创建 Users 目录、解析 --app-id" data-en="Phase 1: env.js sets userData, reads config.json, computes UsersBase, creates Users directories, parses --app-id">阶段1：env.js 设置 userData、读 config.json、计算 UsersBase、创建 Users 目录、解析 <code>--app-id</code></li>
+                            <li data-zh="阶段2：注册所有 IPC handlers（store/db 按 appId 黑盒路由）、写 core.injectionPath" data-en="Phase 2: register all IPC handlers (store/db black-box routing by appId), write core.injectionPath">阶段2：注册所有 IPC handlers（store/db 按 appId 黑盒路由）、写 <code>core.injectionPath</code></li>
+                            <li data-zh="app.whenReady() 触发阶段3（logger.init）" data-en="app.whenReady() triggers Phase 3 (logger.init)"><code>app.whenReady()</code> 触发阶段3（logger.init）</li>
+                            <li data-zh="Electron 加载 APP 的 package.json 中 main 字段指定的入口" data-en="Electron loads the entry specified by the main field in the APP's package.json">Electron 加载 APP 的 <code>package.json</code> 中 <code>main</code> 字段指定的入口</li>
+                            <li data-zh="APP 主进程执行，可通过 require('canbox-core') 访问 core 导出" data-en="APP main process executes, can access core exports via require('canbox-core')">APP 主进程执行，可通过 <code>require('canbox-core')</code> 访问 core 导出</li>
                         </ol>
 
-                        <h3>tsconfig.json</h3>
-                        <pre><code>{
-    "compilerOptions": {
-        "target": "es6",
-        "module": "commonjs",
-        "strict": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
-        "typeRoots": ["./types", "./node_modules/@types"]
-    },
-    "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
-    "exclude": ["node_modules"]
-}</code></pre>
-
-                        <h3 data-zh="使用 JavaScript 的项目配置" data-en="JavaScript Project Configuration">使用 JavaScript 的项目配置</h3>
-                        <pre><code>{
-    "compilerOptions": {
-        "allowJs": true,
-        "checkJs": false,
-        "noEmit": true,
-        "strict": false,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "maxNodeModuleJsDepth": 0,
-        "target": "es6",
-        "module": "commonjs",
-        "forceConsistentCasingInFileNames": true,
-        "typeRoots": ["./types", "./node_modules/@types"]
-    },
-    "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
-    "exclude": ["node_modules"]
-}</code></pre>
-
-                        <h3>jsconfig.json</h3>
-                        <pre><code>{
-    "compilerOptions": {
-        "checkJs": false,
-        "strict": false,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "maxNodeModuleJsDepth": 0,
-        "target": "es6",
-        "module": "commonjs",
-        "forceConsistentCasingInFileNames": true,
-        "typeRoots": ["./types", "./node_modules/@types"]
-    },
-    "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
-    "exclude": ["node_modules"]
-}</code></pre>
+                        <h3 data-zh="manager 启动 APP 的实现" data-en="manager Launching APP Implementation">manager 启动 APP 的实现</h3>
+                        <p data-zh="canbox-manager 通过 manager.apps.launch IPC 启动 APP：" data-en="canbox-manager launches APPs via the manager.apps.launch IPC:">canbox-manager 通过 <code>manager.apps.launch</code> IPC 启动 APP：</p>
+                        <pre><code>const child = spawn(process.execPath, [
+    '-r', coreInjection,
+    appPath,
+    `--app-id=${appId}`
+], {
+    detached: true,
+    stdio: 'ignore',
+    env: { ...process.env, NODE_ENV: 'production' }  // 显式设 production
+});
+child.unref();</code></pre>
+                        <p data-zh="关键：必须显式设置 env.NODE_ENV=production。否则 manager 在开发模式运行时（NODE_ENV=development）会通过默认继承传给子 APP，导致 APP 误判为开发模式（加载 dev server 白屏、无条件开 devTools 等）。" data-en="Key: must explicitly set env.NODE_ENV=production. Otherwise, when manager runs in dev mode (NODE_ENV=development), it will be inherited by child APPs via default inheritance, causing APPs to misjudge as dev mode (loading dev server white screen, unconditionally opening devTools, etc.)."><strong>关键：必须显式设置 <code>env.NODE_ENV=production</code>。</strong>否则 manager 在开发模式运行时（<code>NODE_ENV=development</code>）会通过默认继承传给子 APP，导致 APP 误判为开发模式（加载 dev server 白屏、无条件开 devTools 等）。</p>
                     </section>
 
-                    <!-- repos -->
-                    <section id="repos" class="doc-section">
-                        <h2>repos</h2>
-                        <p data-zh="canbox 没有中心服务器，所有能使用的 app 都靠交流传播 😆" data-en="canbox has no central server, all available apps are spread through communication 😆">canbox没有中心服务器，所有能使用的app都靠交流传播😆</p>
+                    <!-- 构建与发布 -->
+                    <section id="build" class="doc-section">
+                        <h2 data-zh="构建与发布" data-en="Build & Release">构建与发布</h2>
+                        <h3 data-zh="canbox-manager / canbox-developer 开发" data-en="canbox-manager / canbox-developer Development">canbox-manager / canbox-developer 开发</h3>
+                        <pre><code># 安装依赖
+npm install
 
-                        <p data-zh="repos 文件就是 app 信息的集合，这是一个 json 格式的描述文件：" data-en="repos file is a collection of app information, this is a json format description file:">repos文件就是app信息的集合，这是一个json格式的描述文件：</p>
+# 开发模式（Vite dev server）
+npm run dev
+
+# Vite 构建
+npm run build
+
+# Electron 启动（需先 build）
+npm run start</code></pre>
+
+                        <h3 data-zh="产品打包" data-en="Product Packaging">产品打包</h3>
+                        <p data-zh="canbox-manager 的产品包采用结构化部署方式，包含共享 Electron 运行时、canbox-core 和 manager APP：" data-en="canbox-manager's product package uses structured deployment, containing shared Electron runtime, canbox-core, and manager APP:">canbox-manager 的产品包采用结构化部署方式，包含共享 Electron 运行时、canbox-core 和 manager APP：</p>
+                        <ul>
+                            <li data-zh="canbox-core 作为 extraResources 目录分发，不放在 app.asar 内，确保 pouchdb 等原生模块正常工作" data-en="canbox-core is distributed as an extraResources directory, not inside app.asar, to ensure native modules like pouchdb work correctly">canbox-core 作为 <code>extraResources</code> 目录分发，不放在 <code>app.asar</code> 内，确保 pouchdb 等原生模块正常工作</li>
+                            <li data-zh="bin/ 目录包含启动脚本（Linux: canbox，Windows: canbox.bat），封装 Electron 启动命令" data-en="bin/ directory contains launcher scripts (Linux: canbox, Windows: canbox.bat) that wrap Electron startup commands"><code>bin/</code> 目录包含启动脚本（Linux: <code>canbox</code>，Windows: <code>canbox.bat</code>），封装 Electron 启动命令</li>
+                            <li data-zh="安装时生成 desktop/lnk 快捷方式，StartupWMClass 设为 canbox-manager 以确保任务栏图标关联" data-en="Installation generates desktop/lnk shortcuts with StartupWMClass set to canbox-manager to ensure taskbar icon association">安装时生成 desktop/lnk 快捷方式，<code>StartupWMClass</code> 设为 <code>canbox-manager</code> 以确保任务栏图标关联</li>
+                        </ul>
+
+                        <h3 data-zh="自动更新" data-en="Auto Update">自动更新</h3>
+                        <p data-zh="canbox-manager 内置自动更新功能，采用 GitHub Releases 作为更新源：" data-en="canbox-manager has built-in auto-update functionality, using GitHub Releases as the update source:">canbox-manager 内置自动更新功能，采用 GitHub Releases 作为更新源：</p>
+                        <ul>
+                            <li data-zh="启动后 10 秒后台检查更新（非阻塞）" data-en="Background update check 10 seconds after startup (non-blocking)">启动后 10 秒后台检查更新（非阻塞）</li>
+                            <li data-zh="关于页面提供手动「检查更新」按钮" data-en="About view provides a manual 'Check Update' button">关于页面提供手动「检查更新」按钮</li>
+                            <li data-zh="下载安装程序到 os.tmpdir()，使用 GitHub Assets 原始文件名" data-en="Download installer to os.tmpdir(), using original GitHub Assets filename">下载安装程序到 <code>os.tmpdir()</code>，使用 GitHub Assets 原始文件名</li>
+                            <li data-zh="使用 child_process.spawn 启动安装程序（detached: true, stdio: 'ignore'），然后立即 app.quit()" data-en="Use child_process.spawn to start the installer (detached: true, stdio: 'ignore'), then immediately app.quit()">使用 <code>child_process.spawn</code> 启动安装程序（<code>detached: true</code>, <code>stdio: 'ignore'</code>），然后立即 <code>app.quit()</code></li>
+                        </ul>
+                    </section>
+
+                    <!-- 仓库管理 -->
+                    <section id="repos" class="doc-section">
+                        <h2 data-zh="仓库管理" data-en="Repo Management">仓库管理</h2>
+                        <p data-zh="canbox 没有中心服务器，所有能使用的 app 都靠交流传播 😆" data-en="canbox has no central server, all available apps are spread through communication 😆">canbox 没有中心服务器，所有能使用的 app 都靠交流传播 😆</p>
+
+                        <p data-zh="repos 文件就是 app 信息的集合，这是一个 json 格式的描述文件：" data-en="The repos file is a collection of app information, this is a json format description file:">repos 文件就是 app 信息的集合，这是一个 json 格式的描述文件：</p>
                         <pre><code>{
     "title": "",
     "version": "",
@@ -201,211 +440,18 @@ npm run build-appimage    # 构建 Linux AppImage（需在 Linux 下）</code></
     ]
 }</code></pre>
                     </section>
-
-                    <!-- electron-store -->
-                    <section id="electron-store" class="doc-section">
-                        <h2>electron-store</h2>
-                        <p data-zh="这里罗列出了 canbox 中所有使用 electron-store 保存的数据" data-en="Here are all the data saved using electron-store in canbox">这里罗列出了canbox中所有使用electron-store保存的数据</p>
-
-                        <p data-zh="你可以在 electron 的 userData 目录下找到它们：app.getPath('userData'), 'Users'" data-en="You can find them in electron's userData directory: app.getPath('userData'), 'Users'">你可以在electron的userData目录下找到它们：<code>app.getPath('userData'), 'Users')</code></p>
-
-                        <h3>canbox.json</h3>
-                        <p data-zh="存储 Canbox 的全局设置，包括语言、字体和窗口配置。" data-en="Store Canbox global settings, including language, font, and window configuration.">存储 Canbox 的全局设置，包括语言、字体和窗口配置。</p>
-                        <pre><code>{
-    "version": "0.5.6",
-    "language": "zh-CN",
-    "font": "\"Microsoft YaHei\", sans-serif",
-    "windowBounds": {
-        "x": 100,
-        "y": 100,
-        "width": 700,
-        "height": 550
-    },
-    "isMaximized": false
-}</code></pre>
-
-                        <h4 data-zh="字段说明" data-en="Field Description">字段说明</h4>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th data-zh="字段" data-en="Field">字段</th>
-                                    <th data-zh="类型" data-en="Type">类型</th>
-                                    <th data-zh="说明" data-en="Description">说明</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>version</td><td>string</td><td data-zh="Canbox 版本号" data-en="Canbox version number">Canbox 版本号</td></tr>
-                                <tr><td>language</td><td>string</td><td data-zh="界面语言，如 zh-CN、en-US" data-en="Interface language, such as zh-CN, en-US">界面语言，如 "zh-CN"、"en-US"</td></tr>
-                                <tr><td>font</td><td>string</td><td data-zh="全局字体，CSS 字体家族字符串" data-en="Global font, CSS font family string">全局字体，CSS 字体家族字符串</td></tr>
-                                <tr><td>windowBounds</td><td>object</td><td data-zh="窗口位置和大小（自动管理）" data-en="Window position and size (automatically managed)">窗口位置和大小（自动管理）</td></tr>
-                                <tr><td>windowBounds.x</td><td>number</td><td data-zh="窗口左上角 x 坐标（屏幕坐标）" data-en="Window top-left x coordinate (screen coordinate)">窗口左上角 x 坐标（屏幕坐标）</td></tr>
-                                <tr><td>windowBounds.y</td><td>number</td><td data-zh="窗口左上角 y 坐标（屏幕坐标）" data-en="Window top-left y coordinate (screen coordinate)">窗口左上角 y 坐标（屏幕坐标）</td></tr>
-                                <tr><td>windowBounds.width</td><td>number</td><td data-zh="窗口宽度（像素）" data-en="Window width (pixels)">窗口宽度（像素）</td></tr>
-                                <tr><td>windowBounds.height</td><td>number</td><td data-zh="窗口高度（像素）" data-en="Window height (pixels)">窗口高度（像素）</td></tr>
-                                <tr><td>isMaximized</td><td>boolean</td><td data-zh="窗口是否最大化（自动管理）" data-en="Whether the window is maximized (automatically managed)">窗口是否最大化（自动管理）</td></tr>
-                            </tbody>
-                        </table>
-
-                        <p><strong data-zh="注意" data-en="Note">注意</strong>：<span data-zh="windowBounds 和 isMaximized 由应用自动管理，无需手动修改。" data-en="windowBounds and isMaximized are automatically managed by the application, no need to modify manually.">windowBounds 和 isMaximized 由应用自动管理，无需手动修改。</span></p>
-
-                        <ul>
-                            <li data-zh="窗口状态保存时机：" data-en="Window state save timing:"><strong data-zh="窗口状态保存时机" data-en="Window state save timing">窗口状态保存时机</strong>：
-                                <ul>
-                                    <li data-zh="用户点击关闭按钮时（最小化到托盘）" data-en="When user clicks the close button (minimize to tray)">用户点击关闭按钮时（最小化到托盘）</li>
-                                    <li data-zh="应用退出时" data-en="When the application exits">应用退出时</li>
-                                </ul>
-                            </li>
-                            <li data-zh="窗口状态恢复规则：" data-en="Window state restore rules:"><strong data-zh="窗口状态恢复规则" data-en="Window state restore rules">窗口状态恢复规则</strong>：
-                                <ul>
-                                    <li data-zh="如果 isMaximized 为 true，启动时直接最大化窗口" data-en="If isMaximized is true, maximize the window directly on startup">如果 isMaximized 为 true，启动时直接最大化窗口</li>
-                                    <li data-zh="如果 isMaximized 为 false，启动时恢复 windowBounds 中的位置和大小" data-en="If isMaximized is false, restore the position and size from windowBounds on startup">如果 isMaximized 为 false，启动时恢复 windowBounds 中的位置和大小</li>
-                                    <li data-zh="如果保存的位置无效（如屏幕分辨率改变），自动使用默认值（屏幕居中，700x550）" data-en="If the saved position is invalid (such as screen resolution change), automatically use default value (screen centered, 700x550)">如果保存的位置无效（如屏幕分辨率改变），自动使用默认值（屏幕居中，700x550）</li>
-                                </ul>
-                            </li>
-                        </ul>
-
-                        <h4 data-zh="使用方式" data-en="Usage">使用方式</h4>
-                        <pre><code>// 主进程（ipcHandlers.js）
-const { getCanboxStore } = require('./modules/main/storageManager');
-const canboxStore = getCanboxStore();
-
-// 读取
-const language = canboxStore.get('language', 'en-US');
-const font = canboxStore.get('font', 'default');
-
-// 保存
-canboxStore.set('language', 'zh-CN');
-canboxStore.set('font', '"Microsoft YaHei", sans-serif');</code></pre>
-
-                        <pre><code>// 渲染进程（通过 IPC）
-// 读取
-const font = await window.api.font.get();
-
-// 保存
-await window.api.font.set('"Microsoft YaHei", sans-serif');</code></pre>
-
-                        <h3>apps.json</h3>
-                        <pre><code>{
-    "default": {
-        "3a6f487d7f9f4fae86dcfbc3dde401a2": {
-            "id": "com.github.rexlevin.cb-jsonbox",
-            "name": "jsonbox",
-            "version": "0.0.1",
-            "description": "JsonBox - 跨平台的 JSON 格式化工具",
-            "author": "lizl6",
-            "logo": "logo.png"
-        },
-        "885f615f9c374c96a022294950fed558": {
-            "id": "com.github.rexlevin.cb-passgen",
-            "name": "passgen",
-            "version": "0.0.2",
-            "description": "PassGen - 密码生成器",
-            "author": "lizl6",
-            "logo": "logo.png",
-            "sourceTag": "import",
-            "importTime": "2025-09-02 10:28:12"
-        }
-    }
-}</code></pre>
-
-                        <h4 data-zh="字段说明" data-en="Field Description">字段说明</h4>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th data-zh="字段" data-en="Field">字段</th>
-                                    <th data-zh="类型" data-en="Type">类型</th>
-                                    <th data-zh="释义" data-en="Description">释义</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>uid</td><td>object</td><td data-zh="应用唯一标识，由 canbox 生成，用于区分不同的应用" data-en="App unique identifier, generated by canbox, used to distinguish different apps">应用唯一标识，由canbox生成，用于区分不同的应用</td></tr>
-                                <tr><td>id</td><td>string</td><td data-zh="应用 id，形如：com.github.username.appname" data-en="App id, in the form: com.github.username.appname">应用id，形如：com.github.username.appname</td></tr>
-                                <tr><td>name</td><td></td><td data-zh="应用名称" data-en="App name">应用名称</td></tr>
-                                <tr><td>version</td><td></td><td data-zh="应用版本" data-en="App version">应用版本</td></tr>
-                                <tr><td>description</td><td></td><td data-zh="应用描述" data-en="App description">应用描述</td></tr>
-                                <tr><td>author</td><td></td><td data-zh="应用作者" data-en="App author">应用作者</td></tr>
-                                <tr><td>logo</td><td></td><td data-zh="应用 logo" data-en="App logo">应用logo</td></tr>
-                                <tr><td>sourceTag</td><td></td><td data-zh="应用来源标记，用于区分应用来源：import、git" data-en="App source tag, used to distinguish app source: import, git">应用来源标记，用于区分应用来源：import、git</td></tr>
-                            </tbody>
-                        </table>
-
-                        <h3>appsDev.json</h3>
-                        <pre><code>{
-    "default": [
-        {
-            "id": "d80c120e35ec4216a7428241b9ac294a",
-            "path": "/depot/cargo/cb-jsonbox/",
-            "name": "jsonbox"
-        },
-        {
-            "id": "f2dff38866914ad0a81c49504f5da266",
-            "path": "/depot/cargo/canbox-demo/",
-            "name": "demo"
-        }
-    ]
-}</code></pre>
-
-                        <h3>repos.json</h3>
-                        <pre><code>{
-    "default": {
-        "3a6f487d7f9f4fae86dcfbc3dde401a2": {
-            "id": "com.github.rexlevin.cb-jsonbox",
-            "name": "jsonbox",
-            "repo": "https://github.com/rexlevin/cb-jsonbox",
-            "branch": "master",
-            "author": "lizl6",
-            "version": "0.0.2",
-            "description": "JsonBox - 跨平台的 JSON 格式化工具",
-            "logo": "/home/lizl6/.config/canbox/Users/repos/3a6f487d7f9f4fae86dcfbc3dde401a2/logo.png",
-            "files": {
-                "app": {
-                    "json": "39f57b38922a67772fc8b1535b3f3a678f95854f7e5b0791fde9caab8009be8a"
-                },
-                "README": {
-                    "md": "b98eaa8cdea3f6325a13764d259c80cb4996a7bc0adaab228dbd68d2e275c51d"
-                },
-                "HISTORY": {
-                    "md": "a3c15b800afcc01ff4d9b8e8bc700957b84cea81"
-                }
-            },
-            "createTime": "2025-08-09 11:31:50",
-            "downloaded": true,
-            "downloadedTime": "2025-08-29 14:12:33",
-            "toUpdate": true
-        }
-    }
-}</code></pre>
-
-                        <h4 data-zh="字段说明" data-en="Field Description">字段说明</h4>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th data-zh="字段" data-en="Field">字段</th>
-                                    <th data-zh="释义" data-en="Description">释义</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>id</td><td data-zh="仓库唯一标识，由仓库的作者和仓库名称组成" data-en="Repo unique identifier, composed of repo author and repo name">仓库唯一标识，由仓库的作者和仓库名称组成</td></tr>
-                                <tr><td>name</td><td data-zh="仓库名称" data-en="Repo name">仓库名称</td></tr>
-                                <tr><td>repo</td><td data-zh="仓库地址，一段 git 仓库 url，务必注意仓库一定要可访问" data-en="Repo address, a git repository URL, make sure the repository is accessible">仓库地址，一段git仓库url，务必注意仓库一定要可访问</td></tr>
-                                <tr><td>branch</td><td data-zh="仓库分支，默认 main" data-en="Repo branch, default main">仓库分支，默认 main</td></tr>
-                                <tr><td>author</td><td data-zh="仓库作者" data-en="Repo author">仓库作者</td></tr>
-                                <tr><td>version</td><td data-zh="仓库版本" data-en="Repo version">仓库版本</td></tr>
-                                <tr><td>description</td><td data-zh="仓库描述" data-en="Repo description">仓库描述</td></tr>
-                                <tr><td>logo</td><td data-zh="仓库 logo" data-en="Repo logo">仓库logo</td></tr>
-                                <tr><td>files</td><td data-zh="仓库文件" data-en="Repo files">仓库文件</td></tr>
-                                <tr><td>createTime</td><td data-zh="仓库创建时间，yyyy-MM-dd HH:mm:ss" data-en="Repo creation time, yyyy-MM-dd HH:mm:ss">仓库创建时间，yyyy-MM-dd HH:mm:ss</td></tr>
-                                <tr><td>downloaded</td><td data-zh="boolean，是否已经下载" data-en="boolean, whether downloaded">boolean，是否已经下载</td></tr>
-                                <tr><td>downloadedTime</td><td data-zh="下载时间" data-en="Download time">下载时间</td></tr>
-                                <tr><td>toUpdate</td><td data-zh="boolean，是否可更新" data-en="boolean, whether it can be updated">boolean，是否可更新</td></tr>
-                            </tbody>
-                        </table>
-                    </section>
                 </div>
             </div>
         </div>
     </main>
 
-    <script src="./scripts/docs.js"></script>
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Canbox. <span data-zh="开源基于 Apache-2.0 许可证" data-en="Open source under Apache-2.0 license">开源基于 Apache-2.0 许可证</span></p>
+        </div>
+    </footer>
+
+    <script src="./scripts/main.js"></script>
 </body>
 </html>

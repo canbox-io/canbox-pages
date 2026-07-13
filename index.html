@@ -38,9 +38,9 @@
             <img src="./images/logo_512x512.png" alt="Canbox Logo" class="hero-logo">
             <h1 class="hero-title">Canbox</h1>
             <p class="hero-subtitle" data-zh="轻量级应用运行时平台" data-en="Lightweight Application Runtime Platform">轻量级应用运行时平台</p>
-            <p class="hero-description" data-zh="一个 app 集合平台，在这里我们可以开发自己的小工具，并且分享给他人使用。<br>基于 Electron，支持 Linux、Windows、macOS" data-en="An app collection platform where we can develop our own small tools and share them with others.<br>Based on Electron, supports Linux, Windows, macOS">
-                一个 app 集合平台，在这里我们可以开发自己的小工具，并且分享给他人使用。<br>
-                基于 Electron，支持 Linux、Windows、macOS
+            <p class="hero-description" data-zh="基于 Electron 的三层架构应用平台：canbox-core 提供运行时服务，canbox-manager 管理应用，canbox-developer 辅助开发。<br>支持 Linux、Windows、macOS" data-en="A three-layer Electron-based app platform: canbox-core provides runtime services, canbox-manager manages apps, canbox-developer aids development.<br>Supports Linux, Windows, macOS">
+                基于 Electron 的三层架构应用平台：canbox-core 提供运行时服务，canbox-manager 管理应用，canbox-developer 辅助开发。<br>
+                支持 Linux、Windows、macOS
             </p>
             <div class="hero-buttons">
                 <a href="#download" class="btn btn-primary" data-zh="立即下载" data-en="Download Now">立即下载</a>
@@ -57,43 +57,38 @@
                 <div class="feature-card">
                     <div class="feature-icon">📦</div>
                     <h3 class="feature-title" data-zh="应用管理" data-en="App Management">应用管理</h3>
-                    <p class="feature-desc" data-zh="支持应用的安装、卸载和更新，轻松管理你的应用集合" data-en="Support app installation, uninstallation, and updates">支持应用的安装、卸载和更新，轻松管理你的应用集合</p>
+                    <p class="feature-desc" data-zh="支持 APP 的导入、删除、启动和清理数据，按 appId 物理隔离，干净利落" data-en="Support APP import, delete, launch and clear data, physically isolated by appId, clean and simple">支持 APP 的导入、删除、启动和清理数据，按 appId 物理隔离，干净利落</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🌐</div>
-                    <h3 class="feature-title" data-zh="创建网页应用" data-en="Create WebApp">创建网页应用</h3>
-                    <p class="feature-desc" data-zh="将任意网址封装为桌面应用，自动抓取网站信息，支持导航控制和别名系统" data-en="Turn any URL into a desktop app, auto-scrape site info, support navigation controls and alias system">将任意网址封装为桌面应用，自动抓取网站信息，支持导航控制和别名系统</p>
+                    <div class="feature-icon">📚</div>
+                    <h3 class="feature-title" data-zh="仓库管理" data-en="Repository Management">仓库管理</h3>
+                    <p class="feature-desc" data-zh="添加 GitHub 仓库源，浏览和安装社区贡献的应用" data-en="Add GitHub repo sources, browse and install community-contributed apps">添加 GitHub 仓库源，浏览和安装社区贡献的应用</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">📥</div>
-                    <h3 class="feature-title" data-zh="APP 导入导出" data-en="App Import & Export">APP 导入导出</h3>
-                    <p class="feature-desc" data-zh="支持导入离线应用包，支持导出已安装应用供分享" data-en="Import offline app packages, export installed apps for sharing">支持导入离线应用包，支持导出已安装应用供分享</p>
+                    <div class="feature-icon">🔌</div>
+                    <h3 class="feature-title" data-zh="核心服务" data-en="Core Services">核心服务</h3>
+                    <p class="feature-desc" data-zh="canbox-core 通过 -r 注入提供 store/db/dialog 等 29 个 IPC 通道，黑盒式数据隔离" data-en="canbox-core provides 29 IPC channels like store/db/dialog via -r injection, with black-box data isolation">canbox-core 通过 <code>-r</code> 注入提供 store/db/dialog 等 29 个 IPC 通道，黑盒式数据隔离</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3 class="feature-title" data-zh="快捷方式" data-en="Shortcuts">快捷方式</h3>
-                    <p class="feature-desc" data-zh="为常用应用创建桌面、开始菜单快捷方式，支持别名系统" data-en="Create desktop and start menu shortcuts with alias support">为常用应用创建桌面、开始菜单快捷方式，支持别名系统</p>
+                    <div class="feature-icon">🛠️</div>
+                    <h3 class="feature-title" data-zh="开发工具" data-en="Developer Tools">开发工具</h3>
+                    <p class="feature-desc" data-zh="canbox-developer 提供 APP 调试启动、打包发布等开发便利" data-en="canbox-developer provides APP debug launch, packaging and publishing convenience">canbox-developer 提供 APP 调试启动、打包发布等开发便利</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">🔄</div>
                     <h3 class="feature-title" data-zh="自动更新" data-en="Auto Update">自动更新</h3>
-                    <p class="feature-desc" data-zh="支持 GitHub 自动更新，可配置检查频率" data-en="Auto update from GitHub, configurable check frequency">支持 GitHub 自动更新，可配置检查频率</p>
+                    <p class="feature-desc" data-zh="基于 GitHub Releases 的自动更新，启动后自动检查，也支持手动触发" data-en="Auto update based on GitHub Releases, auto-check after startup, also supports manual trigger">基于 GitHub Releases 的自动更新，启动后自动检查，也支持手动触发</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🎨</div>
                     <h3 class="feature-title" data-zh="个性化配置" data-en="Customization">个性化配置</h3>
-                    <p class="feature-desc" data-zh="可配置语言、字体、数据路径，支持窗口缩放（0.5x ~ 2.0x）" data-en="Configurable language, font, data path, window zoom (0.5x ~ 2.0x)">可配置语言、字体、数据路径，支持窗口缩放（0.5x ~ 2.0x）</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📋</div>
-                    <h3 class="feature-title" data-zh="日志查看器" data-en="Log Viewer">日志查看器</h3>
-                    <p class="feature-desc" data-zh="内置日志查看器，支持实时监控、过滤、搜索和导出功能" data-en="Built-in log viewer with real-time monitoring, filtering, search, and export">内置日志查看器，支持实时监控、过滤、搜索和导出功能</p>
+                    <p class="feature-desc" data-zh="可配置语言、字体、日志保留，支持窗口缩放（0.5x ~ 2.0x）" data-en="Configurable language, font, log retention, window zoom (0.5x ~ 2.0x)">可配置语言、字体、日志保留，支持窗口缩放（0.5x ~ 2.0x）</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">📁</div>
                     <h3 class="feature-title" data-zh="文件任务管理" data-en="File Task Management">文件任务管理</h3>
-                    <p class="feature-desc" data-zh="统一下载、导入、导出等文件操作的任务管理" data-en="Unified task management for download, import, export, and other file operations">统一下载、导入、导出等文件操作的任务管理</p>
+                    <p class="feature-desc" data-zh="统一导入等文件操作的任务管理与进度跟踪" data-en="Unified task management and progress tracking for file operations like import">统一导入等文件操作的任务管理与进度跟踪</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">💻</div>
@@ -122,19 +117,7 @@
                             </div>
                             <div class="screenshot-info">
                                 <h3 data-zh="我的 APP" data-en="My Apps">我的 APP</h3>
-                                <p data-zh="管理已安装的应用，支持导入导出、创建网页应用" data-en="Manage installed apps, import/export, and create WebApps">管理已安装的应用，支持导入导出、创建网页应用</p>
-                            </div>
-                        </div>
-                        <div class="screenshot-card">
-                            <div class="screenshot-img-wrapper">
-                                <img src="./images/screenshots/MyApps-CreateWebApp.png" alt="创建网页应用" loading="lazy">
-                                <div class="screenshot-overlay">
-                                    <span class="screenshot-zoom">🔍</span>
-                                </div>
-                            </div>
-                            <div class="screenshot-info">
-                                <h3 data-zh="创建网页应用" data-en="Create WebApp">创建网页应用</h3>
-                                <p data-zh="自动抓取网站信息，一键封装为桌面应用" data-en="Auto-scrape site info, turn any URL into a desktop app">自动抓取网站信息，一键封装为桌面应用</p>
+                                <p data-zh="管理已安装的 APP，支持导入、启动和清理数据" data-en="Manage installed apps, import, launch, and clear data">管理已安装的 APP，支持导入、启动和清理数据</p>
                             </div>
                         </div>
                         <div class="screenshot-card">
@@ -171,7 +154,7 @@
                             </div>
                             <div class="screenshot-info">
                                 <h3 data-zh="APP 开发" data-en="App Development">APP 开发</h3>
-                                <p data-zh="创建、调试、打包自己的应用并分享给他人" data-en="Create, debug, package and share your own apps">创建、调试、打包自己的应用并分享给他人</p>
+                                <p data-zh="调试、打包自己的应用并分享给他人" data-en="Debug, package and share your own apps">调试、打包自己的应用并分享给他人</p>
                             </div>
                         </div>
                         <div class="screenshot-card">
@@ -183,31 +166,7 @@
                             </div>
                             <div class="screenshot-info">
                                 <h3 data-zh="设置" data-en="Settings">设置</h3>
-                                <p data-zh="个性化配置语言、字体、数据路径等" data-en="Customize language, font, data path, and more">个性化配置语言、字体、数据路径等</p>
-                            </div>
-                        </div>
-                        <div class="screenshot-card">
-                            <div class="screenshot-img-wrapper">
-                                <img src="./images/screenshots/Settings2.png" alt="高级设置" loading="lazy">
-                                <div class="screenshot-overlay">
-                                    <span class="screenshot-zoom">🔍</span>
-                                </div>
-                            </div>
-                            <div class="screenshot-info">
-                                <h3 data-zh="高级设置" data-en="Advanced Settings">高级设置</h3>
-                                <p data-zh="自动更新、数据迁移等高级选项" data-en="Auto update, data migration, and more">自动更新、数据迁移等高级选项</p>
-                            </div>
-                        </div>
-                        <div class="screenshot-card">
-                            <div class="screenshot-img-wrapper">
-                                <img src="./images/screenshots/LogViewer.png" alt="日志查看器" loading="lazy">
-                                <div class="screenshot-overlay">
-                                    <span class="screenshot-zoom">🔍</span>
-                                </div>
-                            </div>
-                            <div class="screenshot-info">
-                                <h3 data-zh="日志查看器" data-en="Log Viewer">日志查看器</h3>
-                                <p data-zh="实时监控、过滤、搜索和导出日志" data-en="Real-time monitoring, filtering, searching and exporting logs">实时监控、过滤、搜索和导出日志</p>
+                                <p data-zh="个性化配置语言、字体、日志保留等" data-en="Customize language, font, log retention, and more">个性化配置语言、字体、日志保留等</p>
                             </div>
                         </div>
                         <div class="screenshot-card">
@@ -280,7 +239,7 @@
                 <a href="./docs.html" class="doc-card">
                     <div class="doc-icon">🔌</div>
                     <h3 data-zh="API 文档" data-en="API Documentation">API 文档</h3>
-                    <p data-zh="查看 Runtime 提供的 API 接口" data-en="View Runtime API interfaces">查看 Runtime 提供的 API 接口</p>
+                    <p data-zh="查看 canbox-core 提供的 API 接口" data-en="View canbox-core API interfaces">查看 canbox-core 提供的 API 接口</p>
                 </a>
             </div>
         </div>
@@ -291,23 +250,23 @@
         <div class="container">
             <h2 class="section-title" data-zh="下载安装" data-en="Download & Install">下载安装</h2>
             <div class="download-grid">
-                <a href="https://github.com/canbox-io/canbox/releases" target="_blank" class="download-card">
+                <a href="https://github.com/canbox-io/canbox-manager/releases" target="_blank" class="download-card">
                     <div class="download-icon">🐧</div>
                     <h3>Linux</h3>
                     <p data-zh="AppImage 格式" data-en="AppImage format">AppImage 格式</p>
                     <span class="download-tag" data-zh="推荐" data-en="Recommended">推荐</span>
                 </a>
-                <a href="https://github.com/canbox-io/canbox/releases" target="_blank" class="download-card">
+                <a href="https://github.com/canbox-io/canbox-manager/releases" target="_blank" class="download-card">
                     <div class="download-icon">🪟</div>
                     <h3>Windows</h3>
                     <p data-zh="安装包格式" data-en="Installer format">安装包格式</p>
                 </a>
-                <a href="https://github.com/canbox-io/canbox/releases" target="_blank" class="download-card">
+                <div class="download-card download-card-disabled">
                     <div class="download-icon">🍎</div>
                     <h3>macOS</h3>
                     <p data-zh="待支持" data-en="Coming Soon">待支持</p>
                     <span class="download-tag coming-soon" data-zh="即将推出" data-en="Coming Soon">即将推出</span>
-                </a>
+                </div>
             </div>
         </div>
     </section>
@@ -323,7 +282,7 @@
                 <div class="footer-section">
                     <h4 data-zh="链接" data-en="Links">链接</h4>
                     <ul>
-                        <li><a href="https://github.com/canbox-io/canbox" target="_blank">GitHub</a></li>
+                        <li><a href="https://github.com/lizl6/canbox" target="_blank">GitHub</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">

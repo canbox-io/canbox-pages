@@ -607,6 +607,17 @@ a:hover {
     background-color: var(--text-secondary);
 }
 
+.download-card-disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.download-card-disabled:hover {
+    transform: none;
+    box-shadow: var(--shadow);
+    border-color: transparent;
+}
+
 /* 页脚 */
 .footer {
     background-color: #111827;

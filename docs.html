@@ -40,7 +40,9 @@
                             <li><a href="#store">store</a></li>
                             <li><a href="#db">db</a></li>
                             <li><a href="#window">window</a></li>
+                            <li><a href="#shortcut" data-zh="全局快捷键" data-en="Shortcut">全局快捷键</a></li>
                             <li><a href="#sudo">sudo</a></li>
+                            <li><a href="#misc">misc</a></li>
                             <li><a href="#dialog">dialog</a></li>
                             <li><a href="#lifecycle" data-zh="生命周期" data-en="Lifecycle">生命周期</a></li>
                         </ul>
@@ -203,96 +205,218 @@
                     <!-- window -->
                     <section id="window" class="doc-section">
                         <h2>window</h2>
-                        <h3>canbox.win.createWindow(options, params)</h3>
+                        <p data-zh="提供窗口创建和系统通知能力。" data-en="Provides window creation and system notification capabilities.">提供窗口创建和系统通知能力。</p>
+
+                        <h3>canbox.window.createWindow(options)</h3>
+                        <p data-zh="创建一个新的 BrowserWindow 并返回窗口 ID。" data-en="Create a new BrowserWindow and return the window ID.">创建一个新的 <code>BrowserWindow</code> 并返回窗口 ID。</p>
                         <ul>
                             <li><strong data-zh="参数" data-en="Parameters">参数</strong>
                                 <ol>
-                                    <li>options: <code>object</code> <span data-zh="参考 electron：BaseWindowsConstructorOptions" data-en="Reference electron: BaseWindowsConstructorOptions">参考 electron：BaseWindowsConstructorOptions</span></li>
-                                    <li>params: <code>object</code>: <code>{url: '', title: '', devTools: true}</code>
+                                    <li><code>object</code> options - <span data-zh="参考 electron：BrowserWindowConstructorOptions。不传则使用默认值（800x600，contextIsolation: true，nodeIntegration: false）" data-en="Reference electron: BrowserWindowConstructorOptions. If not passed, defaults are used (800x600, contextIsolation: true, nodeIntegration: false)">参考 electron：<a href="https://www.electronjs.org/docs/latest/api/browser-window#new-browserwindowoptions" target="_blank">BrowserWindowConstructorOptions</a>。不传则使用默认值（800x600，<code>contextIsolation: true</code>，<code>nodeIntegration: false</code>）</span></li>
+                                </ol>
+                            </li>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>object</code> - <span data-zh="包含 success 和 windowId 的对象" data-en="Object containing success and windowId">包含 <code>success</code> 和 <code>windowId</code> 的对象</span></li>
+                        </ul>
+                        <p><strong data-zh="注意" data-en="Note">注意</strong>：<span data-zh="canbox-core 只负责创建窗口对象，APP 需自行管理窗口的加载内容（loadURL/loadFile）、生命周期事件等。通常 APP 在自己的 main.js 中直接 new BrowserWindow()，仅在需要额外窗口时调用此 API。" data-en="canbox-core only creates the window object; the APP needs to manage the window's loaded content (loadURL/loadFile) and lifecycle events itself. Usually, the APP creates its own BrowserWindow() in its main.js, and only calls this API when additional windows are needed.">canbox-core 只负责创建窗口对象，APP 需自行管理窗口的加载内容（<code>loadURL</code>/<code>loadFile</code>）、生命周期事件等。通常 APP 在自己的 <code>main.js</code> 中直接 <code>new BrowserWindow()</code>，仅在需要额外窗口时调用此 API。</span></p>
+
+                        <h3>canbox.window.notification(options)</h3>
+                        <p data-zh="显示系统通知。" data-en="Show a system notification.">显示系统通知。</p>
+                        <ul>
+                            <li><strong data-zh="参数" data-en="Parameters">参数</strong> <code>object</code> options - <span data-zh="参考 electron：Notification 构造选项（title、body、icon 等）" data-en="Reference electron: Notification constructor options (title, body, icon, etc.)">参考 electron：<a href="https://www.electronjs.org/docs/latest/api/notification" target="_blank">Notification</a> 构造选项（<code>title</code>、<code>body</code>、<code>icon</code> 等）</span></li>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>object</code> - <span data-zh="包含 success 的对象" data-en="Object containing success">包含 <code>success</code> 的对象</span></li>
+                        </ul>
+                    </section>
+
+                    <!-- shortcut -->
+                    <section id="shortcut" class="doc-section">
+                        <h2 data-zh="全局快捷键" data-en="Shortcut">全局快捷键</h2>
+                        <p data-zh="封装 Electron globalShortcut API，提供全局快捷键的注册、注销和查询功能。" data-en="Wraps Electron globalShortcut API, providing global shortcut register, unregister and query functions.">封装 Electron <code>globalShortcut</code> API，提供全局快捷键的注册、注销和查询功能。</p>
+
+                        <h3>canbox.shortcut.register(accelerator, options)</h3>
+                        <p data-zh="注册全局快捷键。" data-en="Register a global shortcut.">注册全局快捷键。</p>
+                        <ul>
+                            <li><strong data-zh="参数" data-en="Parameters">参数</strong>
+                                <ol>
+                                    <li><code>string</code> accelerator - <span data-zh="快捷键组合，如 'CommandOrControl+Shift+D'" data-en="Shortcut combination, e.g. 'CommandOrControl+Shift+D'">快捷键组合，如 <code>'CommandOrControl+Shift+D'</code></span></li>
+                                    <li><code>object</code> options - <span data-zh="注册选项" data-en="Registration options">注册选项</span>
                                         <ul>
-                                            <li><code>url</code>: <span data-zh="窗口加载页面相对路径，或路由路径" data-en="Window load page relative path, or route path">窗口加载页面相对路径，或路由路径</span></li>
-                                            <li><code>title</code>: <span data-zh="窗口标题" data-en="Window title">窗口标题</span></li>
-                                            <li><code>devTools</code>: <span data-zh="是否开启 devTools，默认 false" data-en="Whether to enable devTools, default false">是否开启devTools，默认 false</span></li>
-                                            <li><code>ecsClose</code>: <span data-zh="点击 ecs 关闭窗口，默认 false" data-en="Click ecs to close window, default false">点击 ecs 关闭窗口，默认 false</span></li>
+                                            <li><code>mode</code>: <span data-zh="触发模式，'focus'（默认，聚焦窗口）或 'callback'（发送事件到渲染进程，可通过 'canbox:shortcutTriggered' 监听）" data-en="Trigger mode, 'focus' (default, focus window) or 'callback' (send event to renderer process, can be listened via 'canbox:shortcutTriggered')"><code>mode</code>: 触发模式，<code>'focus'</code>（默认，聚焦窗口）或 <code>'callback'</code>（发送事件到渲染进程，可通过 <code>'canbox:shortcutTriggered'</code> 监听）</span></li>
                                         </ul>
                                     </li>
                                 </ol>
                             </li>
-                            <li><strong data-zh="应答" data-en="Response">应答</strong>：<span data-zh="窗口的 id 编码" data-en="Window id encoding">窗口的id编码</span></li>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>object</code> - <span data-zh="成功返回 { success: true }，失败返回 { success: false, reason: 'system-occupied' }" data-en="Success returns { success: true }, failure returns { success: false, reason: 'system-occupied' }">成功返回 <code>{ success: true }</code>，失败返回 <code>{ success: false, reason: 'system-occupied' }</code></span></li>
                         </ul>
 
-                        <h3>canbox.win.notification(options)</h3>
+                        <h3>canbox.shortcut.unregister(accelerator)</h3>
+                        <p data-zh="注销已注册的全局快捷键。" data-en="Unregister a registered global shortcut.">注销已注册的全局快捷键。</p>
                         <ul>
-                            <li><strong data-zh="参数" data-en="Parameters">参数</strong> - <code>options</code>: <span data-zh="参考 electron：Notification" data-en="Reference electron: Notification">参考electron：Notification</span></li>
-                            <li><strong data-zh="应答" data-en="Response">应答</strong></li>
+                            <li><strong data-zh="参数" data-en="Parameters">参数</strong> <code>string</code> accelerator - <span data-zh="快捷键组合" data-en="Shortcut combination">快捷键组合</span></li>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>object</code> - <span data-zh="成功返回 { success: true }，未注册返回 { success: false, reason: 'not-registered' }" data-en="Success returns { success: true }, not registered returns { success: false, reason: 'not-registered' }">成功返回 <code>{ success: true }</code>，未注册返回 <code>{ success: false, reason: 'not-registered' }</code></span></li>
+                        </ul>
+
+                        <h3>canbox.shortcut.isRegistered(accelerator)</h3>
+                        <p data-zh="检查快捷键是否已注册。" data-en="Check whether a shortcut is registered.">检查快捷键是否已注册。</p>
+                        <ul>
+                            <li><strong data-zh="参数" data-en="Parameters">参数</strong> <code>string</code> accelerator - <span data-zh="快捷键组合" data-en="Shortcut combination">快捷键组合</span></li>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>boolean</code> - <span data-zh="是否已注册" data-en="Whether registered">是否已注册</span></li>
                         </ul>
                     </section>
 
                     <!-- sudo -->
                     <section id="sudo" class="doc-section">
                         <h2>sudo</h2>
-                        <p data-zh="提供跨平台的提权执行命令功能，支持 Linux、macOS 和 Windows。" data-en="Provides cross-platform privilege escalation command execution, supporting Linux, macOS, and Windows.">提供跨平台的提权执行命令功能，支持 Linux、macOS 和 Windows。</p>
+                        <p data-zh="封装 @vscode/sudo-prompt，提供需要管理员/root 权限的命令执行。" data-en="Wraps @vscode/sudo-prompt, providing command execution requiring administrator/root privileges.">封装 <code>@vscode/sudo-prompt</code>，提供需要管理员/root 权限的命令执行。</p>
 
-                        <h3>canbox.sudo.exec(options)</h3>
+                        <h3>canbox.sudo.exec(command, options)</h3>
                         <p data-zh="执行需要提权的命令。" data-en="Execute commands that require privilege escalation.">执行需要提权的命令。</p>
                         <ul>
-                            <li><strong data-zh="参数" data-en="Parameters">参数</strong> <code>object</code> options - <span data-zh="提权选项" data-en="Privilege escalation options">提权选项</span></li>
-                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>object</code> - <span data-zh="包含 stdout 和 stderr 的执行结果" data-en="Execution result containing stdout and stderr">包含 stdout 和 stderr 的执行结果</span></li>
+                            <li><strong data-zh="参数" data-en="Parameters">参数</strong>
+                                <ol>
+                                    <li><code>string</code> command - <span data-zh="要执行的命令" data-en="Command to execute">要执行的命令</span></li>
+                                    <li><code>object</code> options - <span data-zh="提权选项，参考 @vscode/sudo-prompt" data-en="Privilege escalation options, reference @vscode/sudo-prompt">提权选项，参考 <code>@vscode/sudo-prompt</code></span></li>
+                                </ol>
+                            </li>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>object</code> - <span data-zh="包含 stdout 和 stderr 的执行结果" data-en="Execution result containing stdout and stderr">包含 <code>stdout</code> 和 <code>stderr</code> 的执行结果</span></li>
                         </ul>
 
-                        <p><strong data-zh="参数说明" data-en="Parameter Description">参数说明</strong>：</p>
+                        <p><strong data-zh="options 参数说明" data-en="options Parameter Description">options 参数说明</strong>：</p>
                         <ul>
-                            <li><code>command</code> - <span data-zh="要执行的命令（必填）" data-en="Command to execute (required)">要执行的命令（必填）</span></li>
-                            <li><code>name</code> - <span data-zh="操作名称，用于向用户提示为何需要提权（必填）" data-en="Operation name, used to prompt the user why privilege escalation is needed (required)">操作名称，用于向用户提示为何需要提权（必填）</span></li>
+                            <li><code>name</code> - <span data-zh="操作名称，用于向用户提示为何需要提权" data-en="Operation name, used to prompt the user why privilege escalation is needed">操作名称，用于向用户提示为何需要提权</span></li>
                         </ul>
 
                         <p><strong data-zh="name 参数要求" data-en="name Parameter Requirements">name 参数要求</strong>：</p>
                         <ul>
                             <li><span data-zh="只能包含字母、数字和空格（不支持中文等非 ASCII 字符）" data-en="Can only contain letters, numbers, and spaces (does not support non-ASCII characters such as Chinese)">只能包含字母、数字和空格（不支持中文等非 ASCII 字符）</span></li>
                             <li><span data-zh="长度不超过 70 个字符" data-en="Length does not exceed 70 characters">长度不超过 70 个字符</span></li>
-                            <li><span data-zh="建议使用英文描述，例如：'Apply Hosts Config'、'Restart Service'" data-en="It is recommended to use English description, for example: 'Apply Hosts Config', 'Restart Service'">建议使用英文描述，例如：'Apply Hosts Config'、'Restart Service'</span></li>
+                            <li><span data-zh="建议使用英文描述，例如：'Apply Hosts Config'、'Restart Service'" data-en="It is recommended to use English description, for example: 'Apply Hosts Config', 'Restart Service'">建议使用英文描述，例如：<code>'Apply Hosts Config'</code>、<code>'Restart Service'</code></span></li>
                         </ul>
 
-                        <p><strong data-zh="平台说明" data-en="Platform Description">平台说明</strong>：</p>
+                        <p><strong data-zh="注意" data-en="Note">注意</strong>：<span data-zh="提权操作涉及系统安全，请谨慎使用。确保只执行必要的命令，并在 name 参数中清晰说明操作目的。" data-en="Privilege escalation involves system security, please use with caution. Ensure that only necessary commands are executed, and clearly explain the purpose of the operation in the name parameter.">提权操作涉及系统安全，请谨慎使用。确保只执行必要的命令，并在 <code>name</code> 参数中清晰说明操作目的。</span></p>
+                    </section>
+
+                    <!-- misc -->
+                    <section id="misc" class="doc-section">
+                        <h2>misc</h2>
+                        <p data-zh="杂项功能模块，提供各类辅助功能。" data-en="Miscellaneous module, providing various auxiliary functions.">杂项功能模块，提供各类辅助功能。</p>
+
+                        <h3>canbox.misc.hello()</h3>
+                        <p data-zh="测试 canbox-core 是否加载成功。" data-en="Test whether canbox-core is loaded successfully.">测试 canbox-core 是否加载成功。</p>
                         <ul>
-                            <li><strong>Linux/macOS</strong> - <span data-zh="使用 sudo-prompt，会弹出系统提权对话框" data-en="Uses sudo-prompt, will pop up a system privilege escalation dialog">使用 sudo-prompt，会弹出系统提权对话框</span></li>
-                            <li><strong>Windows</strong> - <span data-zh="使用 electron-sudo，会弹出 UAC 提权对话框" data-en="Uses electron-sudo, will pop up a UAC privilege escalation dialog">使用 electron-sudo，会弹出 UAC 提权对话框</span></li>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>string</code> - <span data-zh="返回 'Hello from canbox-core!'" data-en="Returns 'Hello from canbox-core!'">返回 <code>'Hello from canbox-core!'</code></span></li>
                         </ul>
 
-                        <p><strong data-zh="注意" data-en="Note">注意</strong>：<span data-zh="提权操作涉及系统安全，请谨慎使用。确保只执行必要的命令，并在 name 参数中清晰说明操作目的。" data-en="Privilege escalation involves system security, please use with caution. Ensure that only necessary commands are executed, and clearly explain the purpose of the operation in the name parameter.">提权操作涉及系统安全，请谨慎使用。确保只执行必要的命令，并在 name 参数中清晰说明操作目的。</span></p>
+                        <h3>canbox.misc.openUrl(url)</h3>
+                        <p data-zh="在外部默认浏览器中打开 URL。" data-en="Open URL in the external default browser.">在外部默认浏览器中打开 URL。</p>
+                        <ul>
+                            <li><strong data-zh="参数" data-en="Parameters">参数</strong> <code>string</code> url - <span data-zh="要打开的 URL" data-en="URL to open">要打开的 URL</span></li>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>Promise&lt;void&gt;</code></li>
+                        </ul>
+
+                        <h3>canbox.misc.getUserData()</h3>
+                        <p data-zh="获取 Users 业务数据目录路径（{UsersBase}/Users/）。" data-en="Get the Users business data directory path ({UsersBase}/Users/).">获取 Users 业务数据目录路径（<code>{UsersBase}/Users/</code>）。</p>
+                        <ul>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>string</code> - <span data-zh="Users 目录绝对路径" data-en="Users directory absolute path">Users 目录绝对路径</span></li>
+                        </ul>
+
+                        <h3>canbox.misc.getCoreVersion()</h3>
+                        <p data-zh="获取 canbox-core 版本号。" data-en="Get the canbox-core version number.">获取 canbox-core 版本号。</p>
+                        <ul>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>string</code> - <span data-zh="canbox-core 版本号" data-en="canbox-core version number">canbox-core 版本号</span></li>
+                        </ul>
+
+                        <h3>canbox.misc.getCorePath()</h3>
+                        <p data-zh="获取 canbox-core 根目录路径（injection.js 所在目录）。" data-en="Get the canbox-core root directory path (where injection.js is located).">获取 canbox-core 根目录路径（<code>injection.js</code> 所在目录）。</p>
+                        <ul>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>string</code> - <span data-zh="canbox-core 根目录绝对路径" data-en="canbox-core root directory absolute path">canbox-core 根目录绝对路径</span></li>
+                        </ul>
+
+                        <h3>canbox.misc.getPlatformInfo()</h3>
+                        <p data-zh="获取当前平台信息。" data-en="Get current platform information.">获取当前平台信息。</p>
+                        <ul>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>object</code> - <span data-zh="包含 platform、arch、nodeVersion、electronVersion、chromeVersion" data-en="Contains platform, arch, nodeVersion, electronVersion, chromeVersion">包含 <code>platform</code>、<code>arch</code>、<code>nodeVersion</code>、<code>electronVersion</code>、<code>chromeVersion</code></span></li>
+                        </ul>
+
+                        <h3>canbox.misc.showItemInFolder(filePath)</h3>
+                        <p data-zh="在文件管理器中显示指定文件。" data-en="Show the specified file in the file manager.">在文件管理器中显示指定文件。</p>
+                        <ul>
+                            <li><strong data-zh="参数" data-en="Parameters">参数</strong> <code>string</code> filePath - <span data-zh="文件路径" data-en="File path">文件路径</span></li>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>void</code></li>
+                        </ul>
+
+                        <h3>canbox.misc.openPath(filePath)</h3>
+                        <p data-zh="打开文件或目录。" data-en="Open a file or directory.">打开文件或目录。</p>
+                        <ul>
+                            <li><strong data-zh="参数" data-en="Parameters">参数</strong> <code>string</code> filePath - <span data-zh="文件/目录路径" data-en="File/directory path">文件/目录路径</span></li>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>Promise&lt;string&gt;</code> - <span data-zh="错误消息（成功时为空字符串）" data-en="Error message (empty string on success)">错误消息（成功时为空字符串）</span></li>
+                        </ul>
                     </section>
 
                     <!-- dialog -->
                     <section id="dialog" class="doc-section">
                         <h2>dialog</h2>
-                        <p data-zh="直接的封装，没有做任何修剪，请求参数和应答均可参见 electron 的 dialog 模块" data-en="Direct encapsulation without any pruning, request parameters and responses can refer to electron's dialog module">直接的封装，没有做任何修建，请求参数和应答均可参见electron的 <a href="https://www.electronjs.org/zh/docs/latest/api/dialog" target="_blank">dialog</a> 模块</p>
+                        <p data-zh="封装 Electron dialog API，提供原生对话框。所有对话框自动绑定到当前焦点窗口。" data-en="Wraps Electron dialog API, providing native dialogs. All dialogs automatically bind to the current focused window.">封装 Electron <a href="https://www.electronjs.org/zh/docs/latest/api/dialog" target="_blank">dialog</a> API，提供原生对话框。所有对话框自动绑定到当前焦点窗口。</p>
 
-                        <h3>showOpenDialog</h3>
-                        <p data-zh="文件选择框" data-en="File selection dialog">文件选择框</p>
-                        <p data-zh="与 Electron showOpenDialog 一致" data-en="Consistent with Electron showOpenDialog">与 Electron showOpenDialog 一致</p>
+                        <h3>canbox.dialog.showMessageBox(options)</h3>
+                        <p data-zh="显示消息框。" data-en="Show a message box.">显示消息框。</p>
+                        <ul>
+                            <li><strong data-zh="参数" data-en="Parameters">参数</strong> <code>object</code> options - <span data-zh="与 Electron dialog.showMessageBox 一致" data-en="Consistent with Electron dialog.showMessageBox">与 Electron <code>dialog.showMessageBox</code> 一致</span></li>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>object</code> - <span data-zh="包含 response、checkboxChecked" data-en="Contains response, checkboxChecked">包含 <code>response</code>、<code>checkboxChecked</code></span></li>
+                        </ul>
 
-                        <h3>showSaveDialog</h3>
-                        <p data-zh="文件保存框" data-en="File save dialog">文件保存框</p>
-                        <p data-zh="与 Electron showSaveDialog 一致" data-en="Consistent with Electron showSaveDialog">与 Electron showSaveDialog 一致</p>
+                        <h3>canbox.dialog.showOpenDialog(options)</h3>
+                        <p data-zh="显示文件打开对话框。" data-en="Show file open dialog.">显示文件打开对话框。</p>
+                        <ul>
+                            <li><strong data-zh="参数" data-en="Parameters">参数</strong> <code>object</code> options - <span data-zh="与 Electron dialog.showOpenDialog 一致（title、defaultPath、filters、properties 等）" data-en="Consistent with Electron dialog.showOpenDialog (title, defaultPath, filters, properties, etc.)">与 Electron <code>dialog.showOpenDialog</code> 一致（<code>title</code>、<code>defaultPath</code>、<code>filters</code>、<code>properties</code> 等）</span></li>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>object</code> - <span data-zh="包含 canceled、filePaths" data-en="Contains canceled, filePaths">包含 <code>canceled</code>、<code>filePaths</code></span></li>
+                        </ul>
 
-                        <h3>showMessageBox</h3>
-                        <p data-zh="消息框" data-en="Message box">消息框</p>
-                        <p data-zh="与 Electron showMessageBox 一致" data-en="Consistent with Electron showMessageBox">与 Electron showMessageBox 一致</p>
+                        <h3>canbox.dialog.showSaveDialog(options)</h3>
+                        <p data-zh="显示文件保存对话框。" data-en="Show file save dialog.">显示文件保存对话框。</p>
+                        <ul>
+                            <li><strong data-zh="参数" data-en="Parameters">参数</strong> <code>object</code> options - <span data-zh="与 Electron dialog.showSaveDialog 一致" data-en="Consistent with Electron dialog.showSaveDialog">与 Electron <code>dialog.showSaveDialog</code> 一致</span></li>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>object</code> - <span data-zh="包含 canceled、filePath" data-en="Contains canceled, filePath">包含 <code>canceled</code>、<code>filePath</code></span></li>
+                        </ul>
                     </section>
 
                     <!-- 生命周期 -->
                     <section id="lifecycle" class="doc-section">
                         <h2 data-zh="生命周期" data-en="Lifecycle">生命周期</h2>
-                        <h3>registerCloseCallback</h3>
-                        <p data-zh="注册窗口关闭时 APP 的回调函数" data-en="Register the callback function of the APP when the window is closed">注册窗口关闭时APP的回调函数</p>
+                        <p data-zh="提供 APP 生命周期相关的回调注册。" data-en="Provides APP lifecycle-related callback registration.">提供 APP 生命周期相关的回调注册。</p>
+
+                        <h3>canbox.lifecycle.registerCloseCallback()</h3>
+                        <p data-zh="注册当前窗口关闭前的回调。注册后，当窗口关闭时会向渲染进程发送 'canbox:lifecycleCloseCallback' 事件，APP 可在 preload.js 中通过 ipcRenderer.on 监听。" data-en="Register a callback before the current window closes. After registration, when the window closes, a 'canbox:lifecycleCloseCallback' event is sent to the renderer process, which the APP can listen to via ipcRenderer.on in preload.js.">注册当前窗口关闭前的回调。注册后，当窗口关闭时会向渲染进程发送 <code>'canbox:lifecycleCloseCallback'</code> 事件，APP 可在 <code>preload.js</code> 中通过 <code>ipcRenderer.on</code> 监听。</p>
                         <ul>
-                            <li><strong data-zh="参数" data-en="Parameters">参数</strong>: <code>Function</code></li>
+                            <li><strong data-zh="参数" data-en="Parameters">参数</strong>：<span data-zh="无（自动绑定调用方所在窗口）" data-en="None (automatically binds to the caller's window)">无（自动绑定调用方所在窗口）</span></li>
+                            <li><strong data-zh="应答" data-en="Response">应答</strong> <code>object</code> - <span data-zh="成功返回 { success: true }，无窗口时返回 { success: false, error: '...' }" data-en="Success returns { success: true }, no window returns { success: false, error: '...' }">成功返回 <code>{ success: true }</code>，无窗口时返回 <code>{ success: false, error: '...' }</code></span></li>
                         </ul>
+                        <p><strong data-zh="使用示例" data-en="Usage Example">使用示例</strong>：</p>
+                        <pre><code>// preload.js
+const { contextBridge, ipcRenderer } = require('electron');
+contextBridge.exposeInMainWorld('api', {
+    lifecycle: {
+        registerCloseCallback: () => ipcRenderer.invoke('canbox.lifecycle.registerCloseCallback'),
+        onCloseCallback: (callback) => ipcRenderer.on('canbox:lifecycleCloseCallback', callback)
+    }
+});
+
+// 渲染进程
+window.api.lifecycle.registerCloseCallback();
+window.api.lifecycle.onCloseCallback(() => {
+    // 执行清理逻辑，如保存数据
+});</code></pre>
                     </section>
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Canbox. <span data-zh="开源基于 Apache-2.0 许可证" data-en="Open source under Apache-2.0 license">开源基于 Apache-2.0 许可证</span></p>
+        </div>
+    </footer>
 
     <script src="./scripts/docs.js"></script>
 </body>
