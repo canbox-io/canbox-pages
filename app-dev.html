@@ -79,7 +79,7 @@
                                 </tr>
                                 <tr>
                                     <td><strong>canbox-core</strong></td>
-                                    <td data-zh="服务提供层，通过 -r 注入，提供 store/db/dialog 等公共服务" data-en="Service layer, injected via -r, provides store/db/dialog and other public services">服务提供层，通过 <code>-r</code> 注入，提供 store/db/dialog 等公共服务</td>
+                                    <td data-zh="服务提供层，通过 -r 注入，只提供 store/db/misc 等核心服务（数据隔离、环境信息）" data-en="Service layer, injected via -r, only provides core services like store/db/misc (data isolation, environment info)">服务提供层，通过 <code>-r</code> 注入，只提供 store/db/misc 等核心服务（数据隔离、环境信息）</td>
                                     <td data-zh="可选" data-en="Optional">可选</td>
                                 </tr>
                                 <tr>
@@ -278,6 +278,7 @@ app.on('activate', () => {
                         <pre><code>const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
+    // === canbox-core 公共服务（黑盒式，按 appId 自动隔离）===
     store: {
         get: (name, key) => ipcRenderer.invoke('canbox.store.get', name, key),
         set: (name, key, value) => ipcRenderer.invoke('canbox.store.set', name, key, value),
@@ -293,25 +294,23 @@ contextBridge.exposeInMainWorld('api', {
         find: (query) => ipcRenderer.invoke('canbox.db.find', query),
         createIndex: (index) => ipcRenderer.invoke('canbox.db.createIndex', index)
     },
-    dialog: {
-        showMessageBox: (options) => ipcRenderer.invoke('canbox.dialog.showMessageBox', options),
-        showOpenDialog: (options) => ipcRenderer.invoke('canbox.dialog.showOpenDialog', options),
-        showSaveDialog: (options) => ipcRenderer.invoke('canbox.dialog.showSaveDialog', options)
-    },
-    window: {
-        createWindow: (options) => ipcRenderer.invoke('canbox.window.createWindow', options),
-        notification: (options) => ipcRenderer.invoke('canbox.window.notification', options)
-    },
     misc: {
         hello: () => ipcRenderer.invoke('canbox.misc.hello'),
-        openUrl: (url) => ipcRenderer.invoke('canbox.misc.openUrl', url),
         getUserData: () => ipcRenderer.invoke('canbox.misc.getUserData'),
         getCoreVersion: () => ipcRenderer.invoke('canbox.misc.getCoreVersion'),
         getCorePath: () => ipcRenderer.invoke('canbox.misc.getCorePath'),
-        getPlatformInfo: () => ipcRenderer.invoke('canbox.misc.getPlatformInfo'),
-        showItemInFolder: (filePath) => ipcRenderer.invoke('canbox.misc.showItemInFolder', filePath),
-        openPath: (filePath) => ipcRenderer.invoke('canbox.misc.openPath', filePath)
+        getPlatformInfo: () => ipcRenderer.invoke('canbox.misc.getPlatformInfo')
     }
+
+    // === APP 自有 IPC（非 canbox-core 提供，按需添加）===
+    // 如需对话框/通知/打开 URL 等，在 APP main.js 注册自己的 IPC 通道：
+    //   ipcMain.handle('myapp.dialog.showOpenDialog', async (_e, options) => {
+    //       return dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), options);
+    //   });
+    // preload 桥接：
+    //   myapp: {
+    //       showOpenDialog: (options) => ipcRenderer.invoke('myapp.dialog.showOpenDialog', options)
+    //   }
 });</code></pre>
 
                         <h3 data-zh="store — 键值存储" data-en="store — Key-Value Storage">store — 键值存储</h3>
