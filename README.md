@@ -21,7 +21,7 @@ Canbox is a lightweight application runtime platform that provides minimal core 
 
 **Key Features:**
 - **App Management**: Supports installation, uninstallation, and updates of applications
-- **WebApp Creation**: Turn any URL into a desktop app with auto site info scraping, navigation controls, and alias system
+- **WebApp Creation**: Turn any URL into a desktop app with auto PWA manifest scraping for name/icon, Chrome UA spoofing, customizable menu bar, navigation shortcuts (Alt+Left/Right), zoom controls (Ctrl+=/-/0); PWA Service Worker offline caching is natively supported by Chromium; web apps use isolated userData, fully separated from platform data
 - **App Import & Export**: Import offline app packages, export installed apps for sharing
 - **Shortcuts**: Create desktop and start menu shortcuts with alias support
 - **Auto Update**: Automatic update checking with GitHub, configurable check frequency
