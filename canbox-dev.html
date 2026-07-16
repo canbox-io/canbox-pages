@@ -241,7 +241,7 @@ global.__CANBOX_CORE_PATH__ = path.resolve(__dirname);  // canbox-core 根目录
                     <!-- canbox-manager -->
                     <section id="manager" class="doc-section">
                         <h2 data-zh="canbox-manager（管理器 APP）" data-en="canbox-manager (Manager APP)">canbox-manager（管理器 APP）</h2>
-                        <p data-zh="canbox-manager 是 Canbox 的管理器 APP，负责 APP 管理（导入/删除/启动/清理数据）、仓库管理（添加/删除/同步）、系统设置（语言/自启/字体/日志保留）。" data-en="canbox-manager is the manager APP of Canbox, responsible for APP management (import/delete/launch/clear data), repo management (add/delete/sync), and system settings (language/autostart/font/log retention).">canbox-manager 是 Canbox 的管理器 APP，负责 APP 管理（导入/删除/启动/清理数据）、仓库管理（添加/删除/同步）、系统设置（语言/自启/字体/日志保留）。</p>
+                        <p data-zh="canbox-manager 是 Canbox 的管理器 APP，负责 APP 管理（导入/删除/启动/清理数据）、网页应用创建与编辑、仓库管理（添加/删除/同步）、系统设置（语言/自启/字体/日志保留）。" data-en="canbox-manager is the manager APP of Canbox, responsible for APP management (import/delete/launch/clear data), web app creation & editing, repo management (add/delete/sync), and system settings (language/autostart/font/log retention).">canbox-manager 是 Canbox 的管理器 APP，负责 APP 管理（导入/删除/启动/清理数据）、网页应用创建与编辑、仓库管理（添加/删除/同步）、系统设置（语言/自启/字体/日志保留）。</p>
 
                         <p data-zh="关键约束：canbox-manager 是普通 APP，通过 electron -r canbox-core/injection.js canbox-manager/ --app-id=canbox-manager 启动，不拥有特殊权限。" data-en="Key constraint: canbox-manager is an ordinary APP, launched via electron -r canbox-core/injection.js canbox-manager/ --app-id=canbox-manager, with no special privileges."><strong>关键约束</strong>：canbox-manager 是普通 APP，通过 <code>electron -r canbox-core/injection.js canbox-manager/ --app-id=canbox-manager</code> 启动，不拥有特殊权限。</p>
 
@@ -275,6 +275,7 @@ global.__CANBOX_CORE_PATH__ = path.resolve(__dirname);  // canbox-core 根目录
                             </thead>
                             <tbody>
                                 <tr><td data-zh="APP 管理" data-en="APP Management">APP 管理</td><td>5</td><td data-zh="list / import / remove / launch / clearData" data-en="list / import / remove / launch / clearData">list / import / remove / launch / clearData</td></tr>
+                                <tr><td data-zh="网页应用" data-en="Web App">网页应用</td><td>3</td><td data-zh="fetchManifest / create / edit（自动抓取 PWA manifest、生成独立 main.js、不注入 core）" data-en="fetchManifest / create / edit (auto-scrape PWA manifest, generate standalone main.js, no core injection)">fetchManifest / create / edit（自动抓取 PWA manifest、生成独立 main.js、不注入 core）</td></tr>
                                 <tr><td data-zh="仓库管理" data-en="Repo Management">仓库管理</td><td>4</td><td data-zh="list / add / remove / sync" data-en="list / add / remove / sync">list / add / remove / sync</td></tr>
                                 <tr><td data-zh="设置" data-en="Settings">设置</td><td>3</td><td data-zh="get / set / getAll" data-en="get / set / getAll">get / set / getAll</td></tr>
                                 <tr><td data-zh="文件任务" data-en="File Tasks">文件任务</td><td>3</td><td data-zh="create / cancel / list" data-en="create / cancel / list">create / cancel / list</td></tr>
