@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "shardId": 1,
+  "apps": [
+    {
+      "id": "com.github.rexlevin.cb-jsonbox",
+      "githubRepoId": 1152563524,
+      "repo": "https://github.com/rexlevin/cb-jsonbox",
+      "createdAt": "2026-02-08T04:05:13.000Z",
+      "discoveredAt": "2026-07-26T14:05:02.959Z",
+      "status": "active",
+      "score": 100,
+      "consecutiveFailures": 0,
+      "lastCheck": "2026-07-26T14:05:02.959Z",
+      "repoStatus": "active",
+      "repoStatusDetail": null,
+      "hasValidCanboxApp": true,
+      "hasValidPackageJson": true,
+      "errorHistory": [],
+      "_canboxApp": {
+        "version": 1,
+        "electron": {
+          "range": "^42.5.1"
+        },
+        "type": "native",
+        "webApp": null
+      },
+      "_pkg": {
+        "name": "cb-jsonbox",
+        "id": "com.github.rexlevin.cb-jsonbox",
+        "private": true,
+        "version": "0.0.8",
+        "description": "JsonBox - 跨平台的 JSON 格式化工具",
+        "author": "rexlevin",
+        "license": "Apache-2.0",
+        "homepage": "https://github.com/rexlevin/cb-jsonbox",
+        "main": "main.js",
+        "logo": "logo.png",
+        "keywords": [
+          "json",
+          "jsonformatter",
+          "development",
+          "utility"
+        ],
+        "scripts": {
+          "dev": "vite --port 5173",
+          "build": "vite build",
+          "preview": "vite preview",
+          "dist": "electron-builder --linux dir",
+          "start": "NODE_ENV=development electron -r /depot/cargo/canbox-core/injection.js . --app-id=cb-jsonbox --no-sandbox"
+        },
+        "dependencies": {
+          "bootstrap-icons": "^1.10.3",
+          "element-plus": "^2.10.7",
+          "lodash-es": "^4.17.21",
+          "monaco-editor": "^0.47.0",
+          "nanoid": "^3.3.4",
+          "vue": "^3.5.17",
+          "vue-router": "^4.5.1",
+          "x2js": "^3.4.4"
+        },
+        "devDependencies": {
+          "@vitejs/plugin-vue": "^6.0.0",
+          "electron": "^42.5.1",
+          "electron-builder": "^26.0.12",
+          "typescript": "^5.9.2",
+          "vite": "^7.0.0"
+        },
+        "build": {
+          "appId": "com.github.rexlevin.cb-jsonbox",
+          "directories": {
+            "output": "dist"
+          },
+          "files": [
+            "main.js",
+            "preload.js",
+            "build/**/*",
+            "package.json",
+            "logo.png"
+          ],
+          "linux": {
+            "target": [
+              "dir"
+            ]
+          }
+        }
+      },
+      "_repoMeta": {
+        "stars": 0,
+        "forks": 0,
+        "lastCommitAt": "2026-07-26T05:02:00.000Z",
+        "license": "Apache-2.0",
+        "homepage": null,
+        "createdAt": "2026-02-08T04:05:13.000Z"
+      },
+      "stars": 0,
+      "forks": 0,
+      "lastCommitAt": "2026-07-26T05:02:00.000Z"
+    }
+  ]
+}

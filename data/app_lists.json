@@ -1,8 +1,16 @@
 {
   "version": 1,
-  "totalApps": 0,
-  "totalShards": 0,
+  "totalApps": 1,
+  "totalShards": 1,
   "nextShardToVerify": 1,
-  "lastRefresh": null,
-  "shards": []
+  "lastRefresh": "2026-07-26T14:05:04.962Z",
+  "shards": [
+    {
+      "id": 1,
+      "file": "app_lists_shards/shard-001.json",
+      "appCount": 1,
+      "lastChecked": null,
+      "nextCheck": null
+    }
+  ]
 }
