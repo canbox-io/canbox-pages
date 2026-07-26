@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 2,
+  "shardId": 1,
+  "generatedAt": "2026-07-26T14:05:26.879Z",
+  "apps": [
+    {
+      "id": "com.github.rexlevin.cb-jsonbox",
+      "repo": "https://github.com/rexlevin/cb-jsonbox",
+      "name": "cb-jsonbox",
+      "description": "JsonBox - 跨平台的 JSON 格式化工具",
+      "description_en": "JsonBox - 跨平台的 JSON 格式化工具",
+      "author": "rexlevin",
+      "category": "",
+      "tags": [],
+      "logo": null,
+      "homepage": "https://github.com/rexlevin/cb-jsonbox",
+      "license": "Apache-2.0",
+      "type": "native",
+      "appVersion": "0.0.8",
+      "electronRange": "^42.5.1",
+      "createdAt": "2026-02-08T04:05:13.000Z",
+      "lastCommitAt": "2026-07-26T05:02:00.000Z",
+      "stars": 0,
+      "forks": 0,
+      "status": "active",
+      "score": 100,
+      "riskLevel": "none",
+      "showDownload": true,
+      "issueUrl": "https://github.com/rexlevin/cb-jsonbox/issues",
+      "disabledReason": null
+    }
+  ]
+}
