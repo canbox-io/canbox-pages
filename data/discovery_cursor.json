@@ -1,7 +1,12 @@
 {
   "version": 1,
-  "lastRun": null,
-  "firstRun": null,
+  "lastRun": "2026-07-26T13:52:26.999Z",
+  "firstRun": "2026-07-26T13:52:26.999Z",
   "totalDiscovered": 0,
-  "history": []
+  "history": [
+    {
+      "timestamp": "2026-07-26T13:52:26.999Z",
+      "newCount": 0
+    }
+  ]
 }
