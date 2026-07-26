@@ -62,6 +62,7 @@ async function fullScan() {
     let page = 1;
     const perPage = 100;
     let hasMore = true;
+    let totalCount = 0;
 
     while (hasMore) {
         console.log(`[discover] Full scan page ${page}...`);
