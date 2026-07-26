@@ -3,6 +3,9 @@ name: Assemble Catalog
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 concurrency:
   group: catalog-assemble
   cancel-in-progress: false

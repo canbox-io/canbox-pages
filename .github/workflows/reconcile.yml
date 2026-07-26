@@ -5,6 +5,10 @@ on:
     - cron: '0 2 * * 1'
   workflow_dispatch:
 
+permissions:
+  contents: write
+  actions: write
+
 jobs:
   reconcile:
     runs-on: ubuntu-latest
