@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-26T09:03:22.024Z",
+  "source": "github",
+  "sourceName": "Canbox 官方 APP 目录",
+  "totalApps": 0,
+  "totalShards": 0,
+  "filterRules": {
+    "includeStatus": [
+      "active",
+      "warning",
+      "critical"
+    ],
+    "includeMinScore": 30,
+    "excludeStatus": [
+      "stale",
+      "removed"
+    ]
+  },
+  "shards": []
+}

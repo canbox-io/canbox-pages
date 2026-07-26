@@ -34,78 +34,55 @@
         <div class="container">
             <div class="apps-header">
                 <h1 data-zh="APP 中心" data-en="App Center">APP 中心</h1>
-                <p data-zh="这里登记了所有基于 Canbox 开发的应用" data-en="All apps developed based on Canbox are registered here">这里登记了所有基于 Canbox 开发的应用</p>
+                <p data-zh="发现和安装基于 Canbox 开发的应用" data-en="Discover and install apps built on Canbox">发现和安装基于 Canbox 开发的应用</p>
             </div>
 
             <!-- APP 列表 -->
             <div class="apps-grid" id="appsGrid">
-                <!-- Apps will be loaded dynamically -->
+                <!-- Apps will be loaded dynamically from catalog.json -->
             </div>
 
             <!-- 提交说明 - 折叠面板 -->
             <div class="submit-section">
                 <button class="submit-toggle" id="submitToggle">
-                    <span data-zh="如何登记你的应用" data-en="How to Submit Your App">如何登记你的应用</span>
+                    <span data-zh="如何发布你的应用" data-en="How to Publish Your App">如何发布你的应用</span>
                     <span class="toggle-icon">▼</span>
                 </button>
                 <div class="submit-content" id="submitContent">
                     <ol class="submit-steps">
                     <li>
-                        <strong data-zh="准备应用信息" data-en="Prepare app info">准备应用信息</strong>
-                        <p data-zh="确保你的应用已经开发完成并上传到 GitHub。" data-en="Ensure your app is developed and uploaded to GitHub.">确保你的应用已经开发完成并上传到 GitHub。</p>
+                        <strong data-zh="开发你的应用" data-en="Develop Your App">开发你的应用</strong>
+                        <p data-zh="基于 Canbox 框架开发你的 Electron 应用，确保项目包含 <code>package.json</code>（含 name、version、main、author、description 字段）。" data-en="Develop your Electron app based on Canbox framework. Ensure your project includes <code>package.json</code> with name, version, main, author, and description fields.">基于 Canbox 框架开发你的 Electron 应用，确保项目包含 <code>package.json</code>（含 name、version、main、author、description 字段）。</p>
                     </li>
                     <li>
-                        <strong data-zh="编辑数据文件" data-en="Edit data file">编辑数据文件</strong>
-                        <p data-zh="在 <code>data/apps-authors/</code> 目录下创建新文件 <code>apps-你的用户名.js</code>（如 apps-alice.js）。文件内容如下：" data-en="Create a new file <code>apps-yourusername.js</code> (e.g. apps-alice.js) in <code>data/apps-authors/</code> directory. File content:">在 <code>data/apps-authors/</code> 目录下创建新文件 <code>apps-你的用户名.js</code>（如 apps-alice.js）。文件内容如下：</p>
-                        <pre><code>// 作者：你的用户名
-const yourapp = {
-    name: '应用名称',
-    id: 'com.github.username.appname',
-    description: '应用描述',
-    description_en: 'App description in English',
-    author: '你的用户名',
-    category: 'development',
-    tags: ['tag1', 'tag2'],
-    repo: 'https://github.com/username/repo',
-    logo: 'https://github.com/username/repo/raw/master/logo.png',
-    license: 'MIT',
-    version: '0.0.1',
-    downloads: '10+',
-    homepage: 'https://github.com/username/repo'
-};
-
-// 可以继续添加更多应用...
-const yourapp2 = {
-    // ... 另一个应用
-};
-
-export default [yourapp, yourapp2];</code></pre>
+                        <strong data-zh="添加 .canbox-app 文件" data-en="Add .canbox-app File">添加 .canbox-app 文件</strong>
+                        <p data-zh="在仓库根目录创建 <code>.canbox-app</code> 文件（JSON 格式），声明应用类型和元数据：" data-en="Create a <code>.canbox-app</code> file (JSON format) in the repository root to declare app type and metadata:">在仓库根目录创建 <code>.canbox-app</code> 文件（JSON 格式），声明应用类型和元数据：</p>
+                        <pre><code>{
+  "type": "native",
+  "electron": {
+    "range": "^42.5.1"
+  },
+  "category": "development",
+  "tags": ["json", "formatter"],
+  "description": "JSON 格式化工具",
+  "description_en": "JSON formatter",
+  "logo": "logo.png"
+}</code></pre>
                     </li>
                     <li>
-                        <strong data-zh="更新总索引" data-en="Update index">更新总索引</strong>
-                        <p data-zh="在 <code>data/apps.js</code> 文件中添加 import 和数组元素：" data-en="Add import and array element in <code>data/apps.js</code> file:">在 <code>data/apps.js</code> 文件中添加 import 和数组元素：</p>
-                        <pre><code>// 在文件顶部添加 import
-import appsYourusername from './apps-authors/apps-yourusername.js';
-
-// 在 apps 数组中添加
-const apps = [
-    ...appsRexlevin,
-    ...appsYourusername  // 新增这一行
-];</code></pre>
-                    </li>
-                    <li>
-                        <strong data-zh="提交 PR" data-en="Submit PR">提交 PR</strong>
-                        <p data-zh="将修改推送到你的 fork，然后提交 Pull Request 到原仓库。" data-en="Push the changes to your fork, then submit a Pull Request to the original repository.">将修改推送到你的 fork，然后提交 Pull Request 到原仓库。</p>
+                        <strong data-zh="添加 canbox-app Topic" data-en="Add canbox-app Topic">添加 canbox-app Topic</strong>
+                        <p data-zh="在 GitHub 仓库的 Settings → Topics 中添加 <code>canbox-app</code> 标签。系统会自动发现你的应用，无需提交 PR。" data-en="Add <code>canbox-app</code> topic in your GitHub repo Settings → Topics. The system will automatically discover your app, no PR needed.">在 GitHub 仓库的 Settings → Topics 中添加 <code>canbox-app</code> 标签。系统会自动发现你的应用，无需提交 PR。</p>
                     </li>
                 </ol>
 
                 <div class="tips">
                     <h3 data-zh="注意事项" data-en="Notes">注意事项</h3>
                     <ul>
-                        <li data-zh="请确保 logo 图片可以直接访问" data-en="Please ensure logo image is directly accessible">请确保 logo 图片可以直接访问</li>
-                        <li data-zh="description 和 description_en 都需要填写" data-en="Both description and description_en are required">description 和 description_en 都需要填写</li>
-                        <li data-zh="category 必须是以下之一：development, utility, office, network, audio, video, game, graphics, education" data-en="category must be one of: development, utility, office, network, audio, video, game, graphics, education">category 必须是以下之一：development, utility, office, network, audio, video, game, graphics, education</li>
-                        <li data-zh="version 使用语义化版本号，如 1.0.0" data-en="Use semantic versioning for version, e.g. 1.0.0">version 使用语义化版本号，如 1.0.0</li>
+                        <li data-zh="添加 topic 后最多 2 小时内即可在 APP 中心看到" data-en="Your app will appear in the App Center within 2 hours after adding the topic">添加 topic 后最多 2 小时内即可在 APP 中心看到</li>
+                        <li data-zh=".canbox-app 文件中的 type 字段必填，支持 native / web / pwa" data-en="The type field in .canbox-app is required, supports native / web / pwa">.canbox-app 文件中的 type 字段必填，支持 native / web / pwa</li>
+                        <li data-zh="native 类型应用需填写 electron.range 字段" data-en="Native apps require the electron.range field">native 类型应用需填写 electron.range 字段</li>
+                        <li data-zh="logo 文件路径相对于仓库根目录，默认取 logo.png" data-en="Logo file path is relative to the repository root, defaults to logo.png">logo 文件路径相对于仓库根目录，默认取 logo.png</li>
+                        <li data-zh="category 可选值：development / network / utilities / productivity / graphics 等" data-en="category options: development / network / utilities / productivity / graphics, etc.">category 可选值：development / network / utilities / productivity / graphics 等</li>
                     </ul>
                 </div>
                 </div>
