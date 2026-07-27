@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "shardId": 1,
-  "generatedAt": "2026-07-27T05:36:46.759Z",
+  "generatedAt": "2026-07-27T09:21:51.158Z",
   "apps": [
     {
       "id": "com.github.rexlevin.cb-jsonbox",
@@ -12,7 +12,7 @@
       "author": "rexlevin",
       "category": "",
       "tags": [],
-      "logo": null,
+      "logo": "https://raw.githubusercontent.com/rexlevin/cb-jsonbox/main/logo.png",
       "homepage": "https://github.com/rexlevin/cb-jsonbox",
       "license": "Apache-2.0",
       "type": "native",
