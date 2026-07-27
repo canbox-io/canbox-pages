@@ -589,12 +589,11 @@ function toCatalogApp(app, canboxApp, pkg, repoMeta) {
 
     // Logo URL
     let logo = null;
-    if (canboxApp && canboxApp.logo) {
-        const repoMatch = app.repo.match(/github\.com\/([^/]+)\/([^/]+)/);
-        if (repoMatch) {
-            const branch = 'master'; // 默认 master，实际可从 repoMeta 获取
-            logo = `https://raw.githubusercontent.com/${repoMatch[1]}/${repoMatch[2]}/${branch}/${canboxApp.logo}`;
-        }
+    const logoPath = (canboxApp && canboxApp.logo) || (pkg && pkg.logo) || 'logo.png';
+    const repoMatch = app.repo.match(/github\.com\/([^/]+)\/([^/]+)/);
+    if (repoMatch) {
+        const branch = 'main'; // 默认 main
+        logo = `https://raw.githubusercontent.com/${repoMatch[1]}/${repoMatch[2]}/${branch}/${logoPath}`;
     }
 
     // Issue URL

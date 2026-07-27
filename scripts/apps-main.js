@@ -205,7 +205,6 @@ function renderApps() {
         const description = currentLang === 'en' && app.description_en ? app.description_en : (app.description || '');
         const homeText = currentLang === 'en' ? 'Home' : '主页';
         const sourceText = currentLang === 'en' ? 'Source' : '源码';
-        const installText = currentLang === 'en' ? 'Install' : '安装';
 
         // 风险标识
         let riskBadge = '';
@@ -225,14 +224,6 @@ function renderApps() {
                 'pwa': 'PWA'
             };
             typeBadge = `<span class="type-badge">${typeLabels[app.type] || app.type}</span>`;
-        }
-
-        // 安装按钮
-        let installBtn = '';
-        if (app.showDownload) {
-            installBtn = `<a href="canbox://install?repo=${encodeURIComponent(app.repo)}" class="app-link install-link" data-zh="安装" data-en="Install">${installText}</a>`;
-        } else if (app.disabledReason) {
-            installBtn = `<span class="app-link disabled-link" title="${app.disabledReason}">${currentLang === 'en' ? 'Unavailable' : '不可用'}</span>`;
         }
 
         return `
@@ -268,9 +259,8 @@ function renderApps() {
                         <span>${app.author || ''}</span>
                     </div>
                     <div class="app-links">
-                        ${installBtn}
                         <a href="${app.homepage || app.repo}" target="_blank" class="app-link primary" data-zh="主页" data-en="Home">${homeText}</a>
-                        <a href="${app.repo}" target="_blank" class="app-link" data-zh="源码" data-en="Source">${sourceText}</a>
+                        ${app.homepage && app.homepage !== app.repo ? `<a href="${app.repo}" target="_blank" class="app-link" data-zh="源码" data-en="Source">${sourceText}</a>` : ''}
                     </div>
                 </div>
             </div>
