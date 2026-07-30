@@ -2,7 +2,7 @@
 import categoryMap from '../data/categories.js';
 
 // 配置
-const CATALOG_BASE_URL = './data';
+const CATALOG_BASE_URL = window.CATALOG_BASE_URL || 'https://raw.githubusercontent.com/canbox-io/canbox-catalog/main/data';
 const CATALOG_INDEX_URL = `${CATALOG_BASE_URL}/catalog.json`;
 
 // 状态
