@@ -374,13 +374,17 @@
 
     <script src="./scripts/main.js"></script>
     <script>
-        // 运行时填充下载链接（平台差异集中在 scripts/site-config.js）
+        // 运行时填充下载链接（部署平台 + OS 平台的差异全部集中在 scripts/site-config.js）
         document.addEventListener('DOMContentLoaded', function() {
             var ext = window.SITE_CONFIG && window.SITE_CONFIG.external;
             if (!ext) return;
+            // managerDownload 是按 OS 平台隔离的对象 { linux, windows }，
+            // 两个卡各自绑定，不再共用同一个字段（否则 Windows 用户会下到 Linux 包）
+            var mgr = ext.managerDownload || {};
             var idToUrl = {
-                downloadManager: ext.managerDownload,
-                downloadManagerWin: ext.managerDownload,
+                downloadManager: mgr.linux,
+                downloadManagerWin: mgr.windows,
+                // developerDownload 是单个跨平台包，无平台维度
                 downloadDeveloper: ext.developerDownload,
                 downloadDeveloperBtn: ext.developerDownload
             };
