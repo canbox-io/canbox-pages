@@ -8,12 +8,13 @@
     <title data-zh="Canbox - 轻量级应用运行时平台" data-en="Canbox - Lightweight Application Runtime Platform">Canbox - 轻量级应用运行时平台</title>
     <link rel="icon" type="image/png" href="./images/logo_128x128.png">
     <link rel="stylesheet" href="./styles/main.css">
+    <script src="./scripts/site-config.js"></script>
 </head>
 <body>
     <!-- 导航栏 -->
     <header class="header">
         <nav class="nav container">
-            <a href="/" class="logo">
+            <a href="./index.html" class="logo">
                 <img src="./images/logo.png" alt="Canbox Logo" class="logo-img">
                 <span class="logo-text">Canbox</span>
             </a>
@@ -298,7 +299,7 @@
                         </div>
                     </div>
                     <div class="developer-actions">
-                        <a href="https://github.com/canbox-io/canbox-developer/releases" target="_blank" class="btn btn-primary">
+                        <a id="downloadDeveloperBtn" target="_blank" class="btn btn-primary">
                             <span data-zh="下载 Canbox Developer" data-en="Download Canbox Developer">下载 Canbox Developer</span>
                         </a>
                         <a href="./app-dev.html" class="btn btn-secondary" data-zh="查看开发指南" data-en="View Dev Guide">查看开发指南</a>
@@ -316,13 +317,13 @@
         <div class="container">
             <h2 class="section-title" data-zh="下载安装" data-en="Download & Install">下载安装</h2>
             <div class="download-grid">
-                <a href="https://github.com/canbox-io/canbox-manager/releases" target="_blank" class="download-card">
+                <a id="downloadManager" target="_blank" class="download-card">
                     <div class="download-icon">🐧</div>
                     <h3>Linux</h3>
                     <p data-zh="AppImage 格式" data-en="AppImage format">AppImage 格式</p>
                     <span class="download-tag" data-zh="推荐" data-en="Recommended">推荐</span>
                 </a>
-                <a href="https://github.com/canbox-io/canbox-manager/releases" target="_blank" class="download-card">
+                <a id="downloadManagerWin" target="_blank" class="download-card">
                     <div class="download-icon">🪟</div>
                     <h3>Windows</h3>
                     <p data-zh="安装包格式" data-en="Installer format">安装包格式</p>
@@ -336,7 +337,7 @@
             </div>
             <h3 class="download-subgroup-title" data-zh="开发者工具" data-en="Developer Tool">开发者工具</h3>
             <div class="download-grid">
-                <a href="https://github.com/canbox-io/canbox-developer/releases" target="_blank" class="download-card">
+                <a id="downloadDeveloper" target="_blank" class="download-card">
                     <div class="download-icon">🛠️</div>
                     <h3>Canbox Developer</h3>
                     <p data-zh="APP 调试与打包发布工具" data-en="APP debug and packaging tool">APP 调试与打包发布工具</p>
@@ -372,5 +373,24 @@
     </footer>
 
     <script src="./scripts/main.js"></script>
+    <script>
+        // 运行时填充下载链接（平台差异集中在 scripts/site-config.js）
+        document.addEventListener('DOMContentLoaded', function() {
+            var ext = window.SITE_CONFIG && window.SITE_CONFIG.external;
+            if (!ext) return;
+            var idToUrl = {
+                downloadManager: ext.managerDownload,
+                downloadManagerWin: ext.managerDownload,
+                downloadDeveloper: ext.developerDownload,
+                downloadDeveloperBtn: ext.developerDownload
+            };
+            Object.keys(idToUrl).forEach(function(id) {
+                var el = document.getElementById(id);
+                if (el && idToUrl[id]) {
+                    el.href = idToUrl[id];
+                }
+            });
+        });
+    </script>
 </body>
 </html>

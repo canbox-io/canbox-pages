@@ -2,5 +2,8 @@
   "name": "canbox-pages",
   "version": "1.0.0",
   "private": true,
-  "description": "Canbox official website"
+  "description": "Canbox official website",
+  "scripts": {
+    "build-snapshot": "node scripts/build-snapshot.mjs"
+  }
 }

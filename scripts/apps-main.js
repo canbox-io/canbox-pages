@@ -1,8 +1,14 @@
 // APP 中心 - 从 catalog.json 动态加载
 import categoryMap from '../data/categories.js';
 
-// 配置
-const CATALOG_BASE_URL = window.CATALOG_BASE_URL || 'https://raw.githubusercontent.com/canbox-io/canbox-catalog/main/data';
+// 配置：平台相关取值统一来自 scripts/site-config.js（运行时按 hostname 自识别）
+const SITE_CONFIG = window.SITE_CONFIG || {};
+// remote：直接跨域读取 canbox-catalog 实例（GitHub raw 带 CORS 头）
+// snapshot：读取站点同源快照 data/catalog-snapshot/（Gitee raw 无 CORS 头，走快照降级）
+const CATALOG_DATA_MODE = SITE_CONFIG.catalogDataMode === 'snapshot' ? 'snapshot' : 'remote';
+const CATALOG_BASE_URL = CATALOG_DATA_MODE === 'snapshot'
+    ? (SITE_CONFIG.catalogSnapshotPath || './data/catalog-snapshot')
+    : (SITE_CONFIG.catalogBaseUrl || '');
 const CATALOG_INDEX_URL = `${CATALOG_BASE_URL}/catalog.json`;
 
 // 状态
