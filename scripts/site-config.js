@@ -27,8 +27,11 @@
             // 产物文件名经核实不含版本号（见 canbox-manager/scripts/build-linux.sh、
             // .github/workflows/release.yml 的 artifact 校验），故链接永久稳定。
             managerDownload: {
-                linux: `https://sourceforge.net/projects/canbox-manager/files/linux/Canbox-linux-x86_64.sh/download`,
-                windows: `https://sourceforge.net/projects/canbox-manager/files/windows/Canbox-Setup-x86_64.exe/download`
+                // canbox-manager 有 2 个平台产物，文件名固定 → 各自固定直链即可。
+                // 物理目录不分层（用户偏好：文件名本身就是路径，不需要 linux/、windows/ 子目录分组）。
+                // 项目级 files/latest/download 仍不可用——只指向"最近上传的那 1 个文件"。
+                linux: `https://sourceforge.net/projects/canbox-manager/files/Canbox-linux-x86_64.sh/download`,
+                windows: `https://sourceforge.net/projects/canbox-manager/files/Canbox-Setup-x86_64.exe/download`
             },
             developerRepo: `https://gitee.com/${ORG}/canbox-developer`,
             developerRelease: `https://gitee.com/${ORG}/canbox-developer/releases`,
