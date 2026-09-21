@@ -14,7 +14,7 @@
         // Gitee raw 不返回 Access-Control-Allow-Origin，浏览器无法跨域直取，
         // 故 Gitee 站走同站快照（由 scripts/build-snapshot.mjs 生成到 data/catalog-snapshot/）
         catalogDataMode: 'snapshot',
-        catalogBaseUrl: `https://gitee.com/${ORG}/canbox-catalog/raw/main/data/gitee`,
+        catalogBaseUrl: `https://gitee.com/${ORG}/canbox-catalog-data/raw/main`,
         catalogSnapshotPath: './data/catalog-snapshot',
         siteRoot: '/canbox-pages/',
         external: {
@@ -45,7 +45,7 @@
     } : {
         platform: 'github',
         catalogDataMode: 'remote',
-        catalogBaseUrl: `https://raw.githubusercontent.com/${ORG}/canbox-catalog/main/data/github`,
+        catalogBaseUrl: `https://raw.githubusercontent.com/${ORG}/canbox-catalog-data/main`,
         catalogSnapshotPath: './data/catalog-snapshot',
         siteRoot: '/',
         external: {
