@@ -19,7 +19,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..');
 
-const DEFAULT_BASE = 'https://gitee.com/canbox-io/canbox-catalog-data/raw/main';
+const DEFAULT_BASE = 'https://raw.githubusercontent.com/canbox-io/canbox-catalog-data/main';
 const DEFAULT_OUT = path.join(REPO_ROOT, 'data', 'catalog-snapshot');
 
 function getArgValue(name, defaultValue = null) {
