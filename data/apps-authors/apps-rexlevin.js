@@ -31,22 +31,6 @@ const hostsbox = {
     homepage: 'https://github.com/rexlevin/cb-hostsbox'
 };
 
-const passgen = {
-    name: 'PassGen',
-    id: 'com.github.rexlevin.cb-passgen',
-    description: '强大的密码生成器，支持自定义长度、字符集，可生成随机字符串和时间戳。',
-    description_en: 'Powerful password generator with custom length, charset, random strings and timestamps.',
-    author: 'rexlevin',
-    category: 'utility',
-    tags: ['password', 'generator', 'security'],
-    repo: 'https://github.com/rexlevin/cb-passgen',
-    logo: 'https://github.com/rexlevin/cb-passgen/raw/main/logo.png',
-    license: 'Apache 2.0',
-    version: '0.0.1',
-    downloads: '50+',
-    homepage: 'https://github.com/rexlevin/cb-passgen'
-};
-
 const imagebox = {
     name: 'ImageBox',
     id: 'com.github.rexlevin.imagebox',
@@ -63,4 +47,4 @@ const imagebox = {
     homepage: 'https://github.com/rexlevin/cb-imagebox'
 };
 
-export default [jsonbox, hostsbox, passgen, imagebox];
+export default [jsonbox, hostsbox, imagebox];
