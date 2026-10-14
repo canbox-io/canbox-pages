@@ -9,7 +9,8 @@ const categoryMap = {
     'video': { zh: '视频', en: 'Video' },
     'game': { zh: '游戏', en: 'Game' },
     'graphics': { zh: '图形', en: 'Graphics' },
-    'education': { zh: '教育', en: 'Education' }
+    'education': { zh: '教育', en: 'Education' },
+    'other': { zh: '其他', en: 'Other' }
 };
 
 export default categoryMap;

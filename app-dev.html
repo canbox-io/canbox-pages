@@ -241,7 +241,7 @@ app.on('activate', () => {
                                 <tr><td><code>description</code></td><td data-zh="否" data-en="No">否</td><td>string</td><td data-zh="APP 描述" data-en="APP description">APP 描述</td></tr>
                                 <tr><td><code>author</code></td><td data-zh="否" data-en="No">否</td><td>string</td><td data-zh="作者" data-en="Author">作者</td></tr>
                                 <tr><td><code>logo</code></td><td data-zh="否" data-en="No">否</td><td>string</td><td data-zh="图标文件路径（相对 APP 根目录）。不配时自动探测" data-en="Icon file path (relative to APP root). Auto-detected when not configured">图标文件路径（相对 APP 根目录）。不配时自动探测</td></tr>
-                                <tr><td><code>keywords</code></td><td data-zh="否" data-en="No">否</td><td>string[]</td><td data-zh="标准 npm 字段，兼做分类标签和搜索关键词" data-en="Standard npm field, doubles as category tags and search keywords">标准 npm 字段，兼做分类标签和搜索关键词</td></tr>
+                                <tr><td><code>keywords</code></td><td data-zh="否" data-en="No">否</td><td>string[]</td><td data-zh="标准 npm 字段，仅作搜索关键词" data-en="Standard npm field, used only as search keywords">标准 npm 字段，仅作搜索关键词</td></tr>
                                 <tr><td><code>platforms</code></td><td data-zh="否" data-en="No">否</td><td>string[]</td><td data-zh="支持的平台，可选值 windows/darwin/linux。不配则默认全平台" data-en="Supported platforms, optional values windows/darwin/linux. Defaults to all platforms when not configured">支持的平台，可选值 <code>windows</code>/<code>darwin</code>/<code>linux</code>。不配则默认全平台</td></tr>
                             </tbody>
                         </table>
@@ -257,13 +257,16 @@ app.on('activate', () => {
                         </ol>
                         <p data-zh="找到即使用，都找不到显示占位图标。" data-en="Uses the first one found, shows a placeholder icon if none found.">找到即使用，都找不到显示占位图标。</p>
 
-                        <h3 data-zh="keywords 用途" data-en="keywords Usage">keywords 用途</h3>
-                        <p data-zh="keywords 是 npm 标准字段，在 Canbox 中兼做两个用途：" data-en="keywords is a standard npm field, serving two purposes in Canbox:"><code>keywords</code> 是 npm 标准字段，在 Canbox 中兼做两个用途：</p>
-                        <ul>
-                            <li data-zh="分类：如 development、utility、graphics 等，用于仓库分类筛选" data-en="Classification: e.g., development, utility, graphics, used for repository category filtering"><strong>分类</strong>：如 <code>development</code>、<code>utility</code>、<code>graphics</code> 等，用于仓库分类筛选</li>
-                            <li data-zh="标签/搜索：如 json、formatter，用于仓库搜索" data-en="Tags/Search: e.g., json, formatter, used for repository search"><strong>标签/搜索</strong>：如 <code>json</code>、<code>formatter</code>，用于仓库搜索</li>
-                        </ul>
-                        <p data-zh="无需单独的 categories 或 tags 字段，统一用 keywords。" data-en="No separate categories or tags field needed, unified under keywords.">无需单独的 <code>categories</code> 或 <code>tags</code> 字段，统一用 <code>keywords</code>。</p>
+                        <h3 data-zh="APP 分类" data-en="App Category">APP 分类</h3>
+                        <p data-zh="APP 分类通过仓库根目录 .canbox-app 文件的 category 字段声明，取值为以下 9 个枚举之一：development、utility、office、network、audio、video、game、graphics、education。缺失或非法值归为 other（未分类）。" data-en="App category is declared via the category field in the .canbox-app file at the repository root. Valid values are one of 9 enums: development, utility, office, network, audio, video, game, graphics, education. Missing or invalid values fall back to other (uncategorized).">APP 分类通过仓库根目录 <code>.canbox-app</code> 文件的 <code>category</code> 字段声明，取值为以下 9 个枚举之一：<code>development</code>、<code>utility</code>、<code>office</code>、<code>network</code>、<code>audio</code>、<code>video</code>、<code>game</code>、<code>graphics</code>、<code>education</code>。缺失或非法值归为 <code>other</code>（未分类）。</p>
+                        <pre><code>{
+    "version": 1,
+    "electron": { "range": "42.5.1" },
+    "type": "native",
+    "webApp": null,
+    "category": "development"
+}</code></pre>
+                        <p data-zh="keywords 字段仅用于搜索，不再兼做分类。" data-en="The keywords field is used only for search, no longer serving as category."><code>keywords</code> 字段仅用于搜索，不再兼做分类。</p>
 
                         <h3 data-zh="README.md" data-en="README.md">README.md</h3>
                         <p data-zh="和 package.json 同级的 README.md 文件将会被解析为 APP 信息在 canbox-manager 中展示（右侧抽屉，使用 markdown-it 渲染）。" data-en="The README.md file at the same level as package.json will be parsed as APP information and displayed in canbox-manager (right-side drawer, rendered with markdown-it).">和 <code>package.json</code> 同级的 <code>README.md</code> 文件将会被解析为 APP 信息在 canbox-manager 中展示（右侧抽屉，使用 <code>markdown-it</code> 渲染）。</p>
