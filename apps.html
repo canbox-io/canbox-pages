@@ -53,11 +53,11 @@
                     <ol class="submit-steps">
                     <li>
                         <strong data-zh="开发你的应用" data-en="Develop Your App">开发你的应用</strong>
-                        <p data-zh="基于 Canbox 框架开发你的 Electron 应用，确保项目包含 <code>package.json</code>（含 name、version、main、author、description 字段）。" data-en="Develop your Electron app based on Canbox framework. Ensure your project includes <code>package.json</code> with name, version, main, author, and description fields.">基于 Canbox 框架开发你的 Electron 应用，确保项目包含 <code>package.json</code>（含 name、version、main、author、description 字段）。</p>
+                        <p data-zh="基于 Canbox 开发你的 Electron 应用，确保项目包含 package.json（含 name、version、main、author、description 字段）。" data-en="Develop your Electron app based on Canbox. Ensure your project includes package.json with name, version, main, author, and description fields.">基于 Canbox 开发你的 Electron 应用，确保项目包含 <code>package.json</code>（含 <code>name</code>、<code>version</code>、<code>main</code>、<code>author</code>、<code>description</code> 字段）。</p>
                     </li>
                     <li>
                         <strong data-zh="添加 .canbox-app 文件" data-en="Add .canbox-app File">添加 .canbox-app 文件</strong>
-                        <p data-zh="在仓库根目录创建 <code>.canbox-app</code> 文件（JSON 格式），声明应用类型和元数据：" data-en="Create a <code>.canbox-app</code> file (JSON format) in the repository root to declare app type and metadata:">在仓库根目录创建 <code>.canbox-app</code> 文件（JSON 格式），声明应用类型和元数据：</p>
+                        <p data-zh="在仓库根目录创建 .canbox-app 文件（JSON 格式），声明应用类型和元数据：" data-en="Create a .canbox-app file (JSON format) in the repository root to declare app type and metadata:">在仓库根目录创建 <code>.canbox-app</code> 文件（JSON 格式），声明应用类型和元数据：</p>
                         <pre><code>{
   "type": "native",
   "electron": {
@@ -69,21 +69,34 @@
   "description_en": "JSON formatter",
   "logo": "logo.png"
 }</code></pre>
+                        <p data-zh="通过 GitHub 仓库发布的开发者应用，type 只能是 native，并必须填写 electron.range。web 类型仅用于 canbox-manager 内部创建的网页应用；PWA 是网页应用的一种形态，不属于仓库发布流程，也不应作为 type 值使用。" data-en="For developer apps published through a GitHub repository, type must be native, and electron.range is required. The web type is only used for web apps created inside canbox-manager; PWA is a form of web app and is not part of the repository publishing flow, nor should it be used as a type value.">通过 GitHub 仓库发布的开发者应用，<code>type</code> 只能是 <code>native</code>，并必须填写 <code>electron.range</code>。<code>web</code> 类型仅用于 canbox-manager 内部创建的网页应用；PWA 是网页应用的一种形态，不属于仓库发布流程，也不应作为 <code>type</code> 值使用。</p>
+                    </li>
+                    <li>
+                        <strong data-zh="打包并发布 GitHub Release" data-en="Package and Publish a GitHub Release">打包并发布 GitHub Release</strong>
+                        <p data-zh="按 canbox 标准结构打包 zip，然后创建 GitHub Release。tag 使用 v{version} 或 {version}，并把 zip 作为 Release 资产上传。" data-en="Package a zip with the canbox standard structure, then create a GitHub Release. Use v{version} or {version} as the tag and upload the zip as a release asset.">按 canbox 标准结构打包 zip，然后创建 GitHub Release。tag 使用 <code>v{version}</code> 或 <code>{version}</code>，并把 zip 作为 Release 资产上传。</p>
+                        <pre><code>{id}-{version}.zip
+├── app.asar
+├── app.asar.unpacked/   (optional)
+├── package.json
+└── logo.png</code></pre>
+                        <p data-zh="资产名必须为 {id}-{version}.zip；没有 id 时使用 {name}-{version}.zip。只把 zip 提交到源码仓库、没有对应 Release 资产时，用户点击下载会失败。" data-en="The asset name must be {id}-{version}.zip, or {name}-{version}.zip when id is absent. If the zip is only committed to the source repository without a matching release asset, downloading will fail.">资产名必须为 <code>{id}-{version}.zip</code>；没有 <code>id</code> 时使用 <code>{name}-{version}.zip</code>。只把 zip 提交到源码仓库、没有对应 Release 资产时，用户点击下载会失败。</p>
+                        <p><a href="./app-dev.html#publish" data-zh="查看完整发布流程" data-en="View the full publish guide">查看完整发布流程</a></p>
                     </li>
                     <li>
                         <strong data-zh="添加 canbox-app Topic" data-en="Add canbox-app Topic">添加 canbox-app Topic</strong>
-                        <p data-zh="在 GitHub 仓库的 Settings → Topics 中添加 <code>canbox-app</code> 标签。系统会自动发现你的应用，无需提交 PR。" data-en="Add <code>canbox-app</code> topic in your GitHub repo Settings → Topics. The system will automatically discover your app, no PR needed.">在 GitHub 仓库的 Settings → Topics 中添加 <code>canbox-app</code> 标签。系统会自动发现你的应用，无需提交 PR。</p>
+                        <p data-zh="在 GitHub 仓库的 Settings → Topics 中添加 canbox-app 标签。系统会自动发现你的应用，无需提交 PR。" data-en="Add the canbox-app topic in your GitHub repo Settings → Topics. The system will automatically discover your app, no PR needed.">在 GitHub 仓库的 Settings → Topics 中添加 <code>canbox-app</code> 标签。系统会自动发现你的应用，无需提交 PR。</p>
                     </li>
                 </ol>
 
                 <div class="tips">
                     <h3 data-zh="注意事项" data-en="Notes">注意事项</h3>
                     <ul>
-                        <li data-zh="添加 topic 后最多 2 小时内即可在 APP 中心看到" data-en="Your app will appear in the App Center within 2 hours after adding the topic">添加 topic 后最多 2 小时内即可在 APP 中心看到</li>
-                        <li data-zh=".canbox-app 文件中的 type 字段必填，支持 native / web / pwa" data-en="The type field in .canbox-app is required, supports native / web / pwa">.canbox-app 文件中的 type 字段必填，支持 native / web / pwa</li>
-                        <li data-zh="native 类型应用需填写 electron.range 字段" data-en="Native apps require the electron.range field">native 类型应用需填写 electron.range 字段</li>
-                        <li data-zh="logo 文件路径相对于仓库根目录，默认取 logo.png" data-en="Logo file path is relative to the repository root, defaults to logo.png">logo 文件路径相对于仓库根目录，默认取 logo.png</li>
-                        <li data-zh="category 可选值：development / network / utilities / productivity / graphics 等" data-en="category options: development / network / utilities / productivity / graphics, etc.">category 可选值：development / network / utilities / productivity / graphics 等</li>
+                        <li data-zh="Catalog 收录不等于可下载：收录只检查 topic、.canbox-app 和 package.json，下载还需要对应的 GitHub Release 资产" data-en="Being listed in the Catalog does not mean it is downloadable: listing checks only the topic, .canbox-app and package.json; downloading also requires a matching GitHub Release asset">Catalog 收录不等于可下载：收录只检查 topic、<code>.canbox-app</code> 和 <code>package.json</code>，下载还需要对应的 GitHub Release 资产</li>
+                        <li data-zh="新仓库添加 topic 后通常在下一个整点被发现；已创建仓库后补 topic 需等待每周一的全量对账（reconcile），需要立即收录时可手动触发 Reconcile workflow" data-en="New repositories are usually discovered at the next hourly run after adding the topic. Adding the topic to an existing repository is handled by the weekly reconciliation (reconcile); trigger the Reconcile workflow manually to list it immediately">新仓库添加 topic 后通常在下一个整点被发现；已创建仓库后补 topic 需等待每周一的全量对账（reconcile），需要立即收录时可手动触发 Reconcile workflow</li>
+                        <li data-zh=".canbox-app 文件中的 type 字段必填且固定为 native；不应使用 web 或 pwa，web 类型仅限 canbox-manager 内部创建的网页应用" data-en="The type field in .canbox-app is required and must be native; do not use web or pwa. The web type is reserved for web apps created inside canbox-manager">.canbox-app 文件中的 <code>type</code> 字段必填且固定为 <code>native</code>；不应使用 <code>web</code> 或 <code>pwa</code>，<code>web</code> 类型仅限 canbox-manager 内部创建的网页应用</li>
+                        <li data-zh="native 类型应用必须填写 electron.range 字段" data-en="Native apps must specify the electron.range field">native 类型应用必须填写 <code>electron.range</code> 字段</li>
+                        <li data-zh="logo 文件路径相对于仓库根目录，默认取 logo.png" data-en="Logo file path is relative to the repository root, defaults to logo.png">logo 文件路径相对于仓库根目录，默认取 <code>logo.png</code></li>
+                        <li data-zh="category 可选值：development / utility / office / network / audio / video / game / graphics / education，缺失或非法值归为 other" data-en="category options: development / utility / office / network / audio / video / game / graphics / education; missing or invalid values fall back to other">category 可选值：<code>development</code> / <code>utility</code> / <code>office</code> / <code>network</code> / <code>audio</code> / <code>video</code> / <code>game</code> / <code>graphics</code> / <code>education</code>，缺失或非法值归为 <code>other</code></li>
                     </ul>
                 </div>
                 </div>
