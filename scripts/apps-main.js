@@ -21,6 +21,11 @@ let catalogMeta = null;
 let isLoading = true;
 let loadError = null;
 
+// APP 展示名：package.json 的 displayName 优先，name / id 兜底（name 仅作机器标识）
+function getAppDisplayName(app) {
+    return app.displayName || app.name || app.id;
+}
+
 // 获取分类名称
 function getCategoryName(category) {
     const name = categoryMap[category] || categoryMap['all'];
@@ -141,7 +146,7 @@ function getFilteredApps() {
     if (searchQuery.trim()) {
         const query = searchQuery.trim().toLowerCase();
         apps = apps.filter(app => {
-            const name = (app.name || '').toLowerCase();
+            const name = [getAppDisplayName(app), app.name].filter(Boolean).join(' ').toLowerCase();
             const desc = (app.description || '').toLowerCase();
             const descEn = (app.description_en || '').toLowerCase();
             const author = (app.author || '').toLowerCase();
@@ -160,7 +165,7 @@ function getFilteredApps() {
             return bTime - aTime;
         });
     } else if (currentSort === 'name') {
-        apps.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+        apps.sort((a, b) => getAppDisplayName(a).localeCompare(getAppDisplayName(b)));
     }
 
     return apps;
@@ -241,9 +246,9 @@ function renderApps() {
                     </svg>
                 </button>
                 <div class="app-header">
-                    <img src="${app.logo || defaultAppLogo}" alt="${app.name}" class="app-logo" onerror="this.src='${defaultAppLogo}'">
+                    <img src="${app.logo || defaultAppLogo}" alt="${getAppDisplayName(app)}" class="app-logo" onerror="this.src='${defaultAppLogo}'">
                     <div class="app-info">
-                        <div class="app-name">${app.name || app.id}</div>
+                        <div class="app-name">${getAppDisplayName(app)}</div>
                         <div class="app-badges">
                             <span class="app-category" data-category="${app.category || ''}">${getCategoryName(app.category || 'all')}</span>
                             ${typeBadge}
